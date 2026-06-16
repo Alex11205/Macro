@@ -1,6 +1,7 @@
 package com.alex.macro.controller;
 
 
+import com.alex.macro.dto.LoginRequest;
 import com.alex.macro.dto.UserRequest;
 import com.alex.macro.dto.UserResponse;
 import com.alex.macro.model.Food;
@@ -43,10 +44,21 @@ public class UserController {
 //                userService.createUser(user));
 //    }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
         UserResponse response = userService.registerUser(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public User login(@RequestBody LoginRequest request) {
+        User user = userService.getUserByUsername(request.username());
+
+        if (!user.getPassword().equals(request.password())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        return user;
     }
 
     @PutMapping("/{id}")
