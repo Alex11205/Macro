@@ -35,7 +35,7 @@ public class FoodService {
         Food existingFood = foodRepository.findByName(foodName)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found with name " + foodName));
 
-        // 2. Overwrite old values with new values
+        // Overwrite old values with new values
         existingFood.setName(updatedFood.getName());
         existingFood.setCarb(updatedFood.getCarb());
         existingFood.setProtein(updatedFood.getProtein());
@@ -44,7 +44,7 @@ public class FoodService {
         existingFood.setWeight(updatedFood.getWeight());
         existingFood.setImageUrl(updatedFood.getImageUrl());
 
-        // 3. Save changes back to the database
+        // Save changes back to the database
         return foodRepository.save(existingFood);
     }
 

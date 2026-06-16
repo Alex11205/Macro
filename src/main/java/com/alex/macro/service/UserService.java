@@ -1,5 +1,7 @@
 package com.alex.macro.service;
 
+import com.alex.macro.dto.UserRequest;
+import com.alex.macro.dto.UserResponse;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.exceptions.NoSuchUserExistsException;
 import com.alex.macro.model.Favorite;
@@ -29,25 +31,45 @@ public class UserService {
                 .orElseThrow(() -> new NoSuchUserExistsException("User not found with name " + id));
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+//    public User createUser(User user) {
+//        return userRepository.save(user);
+//    }
+
+    public UserResponse registerUser(UserRequest request) {
+        // Map DTO to Entity
+        User user = new User();
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+        user.setPassword(request.password());
+
+        User savedUser = userRepository.save(user);
+
+        // Map Entity back to safe Response DTO
+        return new UserResponse(
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getEmail()
+        );
     }
 
     public User updateUser(Long userId, User updatedUser) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id " + userId));
 
-        // 2. Overwrite old values with new values
+        // Overwrite old values with new values
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setPassword(updatedUser.getPassword());
 
-        // 3. Save changes back to the database
+        // Save changes back to the database
         return userRepository.save(existingUser);
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+
+
 
 }

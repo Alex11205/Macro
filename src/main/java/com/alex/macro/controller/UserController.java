@@ -1,10 +1,14 @@
 package com.alex.macro.controller;
 
 
+import com.alex.macro.dto.UserRequest;
+import com.alex.macro.dto.UserResponse;
 import com.alex.macro.model.Food;
 import com.alex.macro.model.User;
 import com.alex.macro.service.FoodService;
 import com.alex.macro.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +37,16 @@ public class UserController {
                 userService.getUserById(id));
     }
 
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody User user) {
+//        return ResponseEntity.ok(
+//                userService.createUser(user));
+//    }
+
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(
-                userService.createUser(user));
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
+        UserResponse response = userService.registerUser(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
