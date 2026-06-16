@@ -47,8 +47,9 @@ public class FoodController {
     }
 
     @DeleteMapping("/{foodName}")
-    public void deleteFood(@PathVariable String foodName) {
+    public String deleteFood(@PathVariable String foodName) {
         foodService.deleteFood(foodName);
+        return "Food with name " + foodName + " has been successfully deleted!";
     }
 
 

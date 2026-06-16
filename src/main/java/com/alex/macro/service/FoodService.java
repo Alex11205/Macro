@@ -24,7 +24,7 @@ public class FoodService {
 
     public Food getFoodByName(String foodName) {
         return foodRepository.findByName(foodName)
-                .orElseThrow(() -> new NoSuchFoodExistsException("Food not found with id " + foodName));
+                .orElseThrow(() -> new NoSuchFoodExistsException("Food not found with name " + foodName));
     }
 
     public Food createFood(Food food) {
@@ -33,7 +33,7 @@ public class FoodService {
 
     public Food updateFood(String foodName, Food updatedFood) {
         Food existingFood = foodRepository.findByName(foodName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found with name " + foodName));
 
         // 2. Overwrite old values with new values
         existingFood.setName(updatedFood.getName());
@@ -51,5 +51,6 @@ public class FoodService {
     public void deleteFood(String foodName) {
         foodRepository.deleteByName(foodName);
     }
+
 
 }
