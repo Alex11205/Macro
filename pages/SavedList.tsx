@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Card from "@/components/card";
 import ProtectedPage from "@/components/ProtectedPage";
-
+import { useRouter } from "next/router";
 
 type CardData = {
   id: bigint;
@@ -19,7 +19,7 @@ export default function SavedPage() {
   const [savedItems, setSavedItems] = useState<CardData[]>([]);
   const [trackedItems, setTrackedItems] = useState<CardData[]>([]);
   const [weights, setWeights] = useState<Record<string, string>>({});
-
+  const router = useRouter();
   useEffect(() => {
     async function fetchFoodData() {
       try {
@@ -36,9 +36,14 @@ export default function SavedPage() {
     if (!userFoodResponse.ok) {
       const userFoodErrorText = await userFoodResponse.text();
       console.error("User food FETCH FAILED:", userFoodResponse.status, userFoodErrorText);
-      alert("Fetching user food failed");
+      // alert("Fetching user food failed");
       return;
     }
+
+    if (userFoodResponse.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+      // console.log(card);
 
     const userFoodData = await userFoodResponse.json();
     setSavedItems(userFoodData);
@@ -47,7 +52,7 @@ export default function SavedPage() {
     // alert("Food fetch successfully!");
       } catch (err) {
         console.error("ERROR:", err);
-    alert("fetch failed");
+    // alert("fetch failed");
       }
     }
     fetchFoodData();
@@ -134,14 +139,21 @@ const totals = trackedItems.reduce(
         
 
       });
+
+
       // alert(`User id is: ${userId}. FoodId is ${card.id}. issaved is ${isSaved}`);
       if (!res.ok) {
         throw new Error("Request failed");
       }
 
+      if (res.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");
+      console.log(card);}
+
     } catch (error) {
       console.error(error);
-      alert("Something went wrong. Please try again.");
+      // alert("Something went wrong. Please try again.");
     }
 
     const alreadySaved = savedItems.some((item) => item.id === card.id);

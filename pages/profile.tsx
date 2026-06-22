@@ -3,6 +3,7 @@ import Foods from "@/pages/foods";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import ProtectedPage from "@/components/ProtectedPage";
+import { useRouter } from "next/router";
 
 export default function Profile() {
 
@@ -29,11 +30,17 @@ type profile = {
 
     const [isEmailWrong, setIsEmailWrong] = useState(false);
     const [isPasswordWrong, setIsPasswordWrong] = useState(false);
-
+ const router = useRouter();
 //      const [wrongEmailMessage, setWrongEmailMessage] = useState('');
 //    const [wrongPasswordMessage, setWrongPasswordMessage] = useState('');
 
      const [isSubmit, setIsSubmit] = useState(false);
+
+     function handleLogOut(){
+        localStorage.removeItem("token");
+        router.replace("/Signin");
+
+     }
 
       useEffect(() => {
          // const stored = JSON.parse(localStorage.getItem("savedCards") || "[]");
@@ -55,9 +62,14 @@ type profile = {
          if (!userDataResponse.ok) {
            const userDataErrorText = await userDataResponse.text();
            console.error("User food FETCH FAILED:", userDataResponse.status, userDataErrorText);
-           alert("Fetching user data failed");
+        //    alert("Fetching user data failed");
            return;
          }
+
+         if (userDataResponse.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+     
      
      
          const userData = await userDataResponse.json();
@@ -67,7 +79,7 @@ type profile = {
          // alert("Food fetch successfully!");
            } catch (err) {
              console.error("ERROR:", err);
-         alert("fetch failed");
+        //  alert("fetch failed");
            }
          }
          fetchUserData();
@@ -99,20 +111,24 @@ type profile = {
     if (!res.ok) {
       const errorText = await res.text();
       console.error("Changing email FAILED:", res.status, errorText);
-      alert("Changing email failed");
+    //   alert("Changing email failed");
       return;
     }
+    if (res.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+     
 
     const data = await res.json();
 
     console.log("Change email RESPONSE:", data);
-    alert("Email Changed successfully!");
+    // alert("Email Changed successfully!");
       window.location.reload();
     
     // router.push("/foods");
   } catch (err) {
     console.error("ERROR:", err);
-    alert("fetch failed");
+    // alert("fetch failed");
   }
 
   };
@@ -145,20 +161,25 @@ type profile = {
     if (!res.ok) {
       const errorText = await res.text();
       console.error("Changing password FAILED:", res.status, errorText);
-      alert("Changing password failed");
+    //   alert("Changing password failed");
       return;
     }
+
+    if (res.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+     
 
     const data = await res.json();
 
     console.log("Change password RESPONSE:", data);
-    alert("Password Changed successfully!");
+    // alert("Password Changed successfully!");
      window.location.reload();
     
     // router.push("/foods");
   } catch (err) {
     console.error("ERROR:", err);
-    alert("fetch failed");
+    // alert("fetch failed");
   }
 
   };
@@ -167,12 +188,18 @@ type profile = {
 
   return (
     <ProtectedPage>
-    <div>
-      <main className="max-w-5xl mx-auto p-6 text-black">
 
+    <div>
+
+      <main className="max-w-5xl mx-auto p-6 text-black">
+    <div className="flex justify-between items-center mb-6">
 
       <h3 className="text-4xl font-bold text-gray-800 mb-6">Hello, {userProfile.username}</h3>
-      
+      <button onClick={handleLogOut} className=" py-1 px-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out" 
+        type="button">Log out
+        
+        </button>
+      </div>
 
       <br></br>
      

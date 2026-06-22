@@ -3,6 +3,7 @@ import Header from "@/components/header";
 import Card from "@/components/card";
 import { useEffect, useState } from "react";
 import ProtectedPage from "@/components/ProtectedPage";
+import { useRouter } from "next/router";
 
 
 type CardData = {
@@ -29,6 +30,7 @@ export default function Foods() {
   // const [foodList, setFoodList] =useState<FoodCardData[]>([]);
   const [savedItems, setSavedItems] = useState<CardData[]>([]);
   const [foodList, setFoodList] = useState<CardData[]>([]);
+   const router = useRouter();
   useEffect(() => {
     // const stored = JSON.parse(localStorage.getItem("savedCards") || "[]");
     // setSavedItems(stored);
@@ -50,17 +52,22 @@ export default function Foods() {
       },
         });
 
+        if (userFoodResponse.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");
+}
+
         if (!allFoodResponse.ok) {
       const allFoodErrorText = await allFoodResponse.text();
       console.error("All food FETCH FAILED:", allFoodResponse.status, allFoodErrorText);
-      alert("Fetching food list failed");
+      // alert("Fetching food list failed");
       return;
     }
 
     if (!userFoodResponse.ok) {
       const userFoodErrorText = await userFoodResponse.text();
       console.error("User food FETCH FAILED:", userFoodResponse.status, userFoodErrorText);
-      alert("Fetching user food failed");
+      // alert("Fetching user food failed");
       return;
     }
 
@@ -75,7 +82,7 @@ export default function Foods() {
     // alert("Food fetch successfully!");
       } catch (err) {
         console.error("ERROR:", err);
-    alert("fetch failed");
+    // alert("fetch failed");
       }
     }
     fetchFoodData();
@@ -94,9 +101,14 @@ export default function Foods() {
         },
 
         
+        
 
       });
+      if (res.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");
       console.log(card);
+      }
       // alert(`User id is: ${userId}. FoodId is ${card.id}. food name is ${card.name}. imageUrl is: ${card.imageUrl}`);
       if (!res.ok) {
         throw new Error("Request failed");
@@ -104,8 +116,10 @@ export default function Foods() {
 
     } catch (error) {
       console.error(error);
-      alert("Something went wrong. Please try again.");
+      // alert("Something went wrong. Please try again.");
     }
+
+    
 
     const alreadySaved = savedItems.some((item) => item.id === card.id);
 

@@ -31,20 +31,20 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
     if (!res.ok) {
       const errorText = await res.text();
       console.error("LOGIN FAILED:", res.status, errorText);
-      alert("Login failed");
+      // alert("Login failed");
       return;
     }
 
     const data = await res.json();
 
     console.log("LOGIN RESPONSE:", data);
-    alert("token is: " + data.token);
+    // alert("token is: " + data.token);
 
     localStorage.setItem("token", data.token);
     router.push("/foods");
   } catch (err) {
     console.error("ERROR:", err);
-    alert("fetch failed");
+    // alert("fetch failed");
   }
 }
 
@@ -90,7 +90,7 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
         </div>
       </form>
       <br></br>
-      <Link href="/Signup" className="text-gray-700 hover:text-blue-600">Sign up here</Link><br></br>
+      <Link href="/Signup" className="text-gray-700 hover:text-blue-600">New User?</Link><br></br>
       
 
     

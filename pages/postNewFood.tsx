@@ -8,6 +8,7 @@ type FoodFormData = {
   protein: string;
   fat: string
   calorie: string;
+  createdBy: string;
 };
 
 
@@ -22,6 +23,7 @@ const initialFormData: FoodFormData = {
   protein: "",
   fat: "",
   calorie: "",
+  createdBy: "",
 };
 
 export default function AddFoodForm({
@@ -51,6 +53,7 @@ export default function AddFoodForm({
       protein: Number(formData.protein),
       fat: Number(formData.fat),
       calorie: Number(formData.calorie),
+      createdBy: localStorage.getItem("token").trim(),
     };
 
     if (!payload.name) {
@@ -61,9 +64,10 @@ export default function AddFoodForm({
     if (
       Number.isNaN(payload.carb) ||
       Number.isNaN(payload.protein) ||
+      Number.isNaN(payload.fat) ||
       Number.isNaN(payload.calorie)
     ) {
-      setMessage("Carb, protein, and calorie must be valid numbers.");
+      setMessage("Carb, protein, fat and calorie must be valid numbers.");
       return;
     }
 
@@ -85,6 +89,9 @@ export default function AddFoodForm({
         body: JSON.stringify(payload),
       });
 
+      if(response.status === 409) {
+        alert("Food already exists!");
+      }
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText || "Food creation failed.");
@@ -202,7 +209,7 @@ export default function AddFoodForm({
         {isSubmitting ? "Submitting..." : "Add Food"}
       </button>
 
-      {message && <p className="text-sm text-gray-700">{message}</p>}
+      {message && <p className="text-lg text-red-700">{message}</p>}
     </form>
     </main>
   );
