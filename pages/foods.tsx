@@ -4,12 +4,6 @@ import Card from "@/components/card";
 import { useEffect, useState } from "react";
 import ProtectedPage from "@/components/ProtectedPage";
 
-// type CardData = {
-//   id: string;
-//   title: string;
-//   continent: string;
-//   image: string;
-// };
 
 type CardData = {
   id: bigint;
@@ -89,20 +83,21 @@ export default function Foods() {
 
    async function toggleSave(card: CardData) {
     const isSaved = savedItems.some((item) => item.id === card.id);
-    const userId = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:8080/api/favorites/${userId}/favorites/${card.id}`, {
+      const res = await fetch(`http://localhost:8080/api/favorites/favorites/${card.id}`, {
         method: isSaved ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": token,
         },
 
         
 
       });
       console.log(card);
-      alert(`User id is: ${userId}. FoodId is ${card.id}. food name is ${card.name}. imageUrl is: ${card.imageUrl}`);
+      // alert(`User id is: ${userId}. FoodId is ${card.id}. food name is ${card.name}. imageUrl is: ${card.imageUrl}`);
       if (!res.ok) {
         throw new Error("Request failed");
       }

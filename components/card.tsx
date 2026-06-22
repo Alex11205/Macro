@@ -1,13 +1,6 @@
 import Link from "next/link";
 import { useState } from "react";
 
-// type CardData = {
-//   id: string
-//   title: string;
-//   continent: string;
-//   image: string;
-
-// };
 
 type CardData = {
   id: bigint;
@@ -50,32 +43,7 @@ export default function Card({
 }: CardProps) {
     // const [isChecked, setIsChecked] = useState(false);
     const card = { id, name, carb, protein, fat, calorie, imageUrl };
-    // const handleChange = (e) => {
-      // setIsChecked(e.target.checked);
-      // localStorage.setItem true;
-    // }
-  // const [weight, setWeight] = useState(0);
-  // async function handleClick() {
-  //   try {
-  //     const res = await fetch(`http://localhost:8080/api/favorites/${userId}/favorites/${id}`, {
-  //       method: isSaved ? "DELETE" : "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
 
-        
-
-  //     });
-  //     alert(`User id is: ${userId}. FoodId is ${id}. issaved is ${isSaved}`);
-  //     if (!res.ok) {
-  //       throw new Error("Request failed");
-  //     }
-
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Something went wrong. Please try again.");
-  //   }
-  // }
 
   return (
     <div className="relative bg-white text-gray-800 rounded-xl shadow-md overflow-hidden p-4 m-2 w-64">
@@ -100,33 +68,13 @@ export default function Card({
       <p className="text-gray-600">Calories: {calorie} kcal</p>
     
       {hasButton && 
-      // <button
-      //   type="button"
-      //   onClick={() => onToggleSave({ id, name, carb, protein, fat, calorie, image_url })}
-      //   // onClick={handleClick}
-      //   className={`px-3 py-1 rounded text-sm font-medium transition ${
-      //     isSaved
-      //       ? "bg-green-600 text-white hover:bg-green-700"
-      //       : "bg-blue-500 text-white hover:bg-blue-600"
-      //   }`}
-      // >
-      //   Track
-      // </button>
       <label className="flex items-center gap-2 mt-4 text-green-500">
       <input 
       type="checkbox"
-      // className="w-full px-4 py-2 border border-black-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-        // Current value is always the state
+  
         checked={isTracked}
         onChange={(e) => onToggleTrack?.(card, e.target.checked)}
-        // onChange={handleChange}
-        // Detect changes in input and update the state
-        // onSubmit={(event) => setUsername(event.target.value)}
-        // onChange={(event) => setWeight(event.target.value)}
-        // placeholder="Please enter the weight"
-        
-        // pattern=".{6,}" 
-        // title="User name must be at least 6 characters!" 
+
       />
       Track this food
       </label>
@@ -145,9 +93,7 @@ export default function Card({
       >
         {isSaved ? "Remove" : "Save"}
       </button>
-      {/* <Link href={`/destinationpages/${id}`}>
-      <p className="rounded  text-sm px-2 py-1 font-medium border inline-block text-grey hover:bg-green-700 hover:text-white">Discover</p>
-      </Link> */}
+
       </div>
       
     </div>

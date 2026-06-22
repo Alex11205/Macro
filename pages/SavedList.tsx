@@ -121,13 +121,14 @@ const totals = trackedItems.reduce(
   async function toggleSave(card: CardData) {
 
     const isSaved = savedItems.some((item) => item.id === card.id);
-    const userId = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:8080/api/favorites/${userId}/favorites/${card.id}`, {
+      const res = await fetch(`http://localhost:8080/api/favorites/favorites/${card.id}`, {
         method: isSaved ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": token,
         },
 
         
