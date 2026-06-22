@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
+    boolean existsByName(String name);
     Optional<Food> findByName(String name);
 
 //    @Transactional

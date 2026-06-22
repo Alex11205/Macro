@@ -2,11 +2,10 @@ package com.alex.macro.controller;
 
 
 import com.alex.macro.dto.LoginRequest;
-import com.alex.macro.dto.UserRequest;
-import com.alex.macro.dto.UserResponse;
-import com.alex.macro.model.Food;
+import com.alex.macro.dto.LoginResponse;
+import com.alex.macro.dto.RegisterRequest;
+import com.alex.macro.dto.RegisterResponse;
 import com.alex.macro.model.User;
-import com.alex.macro.service.FoodService;
 import com.alex.macro.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -14,10 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
@@ -32,10 +32,11 @@ public class UserController {
                 userService.getAllUsers());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    @GetMapping("/profile")
+    public ResponseEntity<User> getUser(@RequestHeader("Authorization") String token) {
+        Long userId = Long.parseLong(token);
         return ResponseEntity.ok(
-                userService.getUserById(id));
+                userService.getUserById(userId));
     }
 
 //    @PostMapping
@@ -45,27 +46,42 @@ public class UserController {
 //    }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
-        UserResponse response = userService.registerUser(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<RegisterResponse> createUser(@Valid @RequestBody RegisterRequest request) {
+        RegisterResponse response = userService.registerUser(request);
+//        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
     }
+
+//    @PostMapping("/login")
+//    public String login(@RequestBody LoginRequest request) {
+//        User user = userService.getUserByUsername(request.username());
+//
+//        if (!user.getPassword().equals(request.password())) {
+//            throw new RuntimeException("Invalid password");
+//        }
+//
+//        return String.valueOf(user.getId());
+//    }
 
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest request) {
-        User user = userService.getUserByUsername(request.username());
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        LoginResponse response = userService.authenticate(loginRequest);
+        return ResponseEntity.ok(response);
 
-        if (!user.getPassword().equals(request.password())) {
-            throw new RuntimeException("Invalid password");
-        }
 
-        return user;
+
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> replaceUser( @PathVariable Long id, @RequestBody User updatedUser) {
 
+
+
+    @PutMapping
+    public ResponseEntity<User> replaceUser( @RequestHeader("Authorization") String token,
+                                             @RequestBody User updatedUser) {
+        Long userId = Long.parseLong(token);
         return ResponseEntity.ok(
-                userService.updateUser(id, updatedUser));
+                userService.updateUser(userId, updatedUser));
 
     }
 

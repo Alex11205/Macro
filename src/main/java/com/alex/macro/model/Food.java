@@ -1,16 +1,18 @@
 package com.alex.macro.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_food_name", columnNames = "name")
+        }
+)
 @Getter @Setter @NoArgsConstructor
 public class Food {
 
@@ -18,6 +20,7 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private Double carb;
@@ -32,7 +35,9 @@ public class Food {
 
     private String imageUrl;
 
-    public Food(String name, Double carb, Double protein, Double fat, Double calorie, Double weight, String imageUrl) {
+    private String createdBy;
+
+    public Food(String name, Double carb, Double protein, Double fat, Double calorie, Double weight, String imageUrl, String createdBy) {
 
         this.name = name;
         this.carb = carb;
@@ -41,6 +46,7 @@ public class Food {
         this.calorie = calorie;
         this.weight = weight;
         this.imageUrl = imageUrl;
+        this.createdBy = createdBy;
     }
 
 }

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record UserRequest(
+public record RegisterRequest(
         @NotBlank(message = "Userame cannot be empty")
         String username,
 

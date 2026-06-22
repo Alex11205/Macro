@@ -1,5 +1,6 @@
 package com.alex.macro.service;
 
+import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.model.Favorite;
 import com.alex.macro.model.Food;
@@ -10,6 +11,8 @@ import com.alex.macro.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,8 +24,29 @@ public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
 
-    public void deleteFood(String foodName) {
-        foodRepository.deleteByName(foodName);
+//    public void deleteFood(String foodName) {
+//        foodRepository.deleteByName(foodName);
+//    }
+
+
+
+//    public List<Food> getFavoritesByUser(Long userId) {
+//        List<Favorite> favorites = favoriteRepository.findByUserId(userId);
+//
+//        return favorites.stream()
+//                .map(Favorite::getFood)
+//                .toList();
+//    }
+
+    public List<FavoriteFood> getFavoritesByUser(Long userId) {
+//        List<Favorite> favorites = favoriteRepository.findByUserId(userId);
+//        System.out.println("The result is: " + favorites);
+//        return favorites.stream()
+//                .map(Favorite::getFood)
+//                .toList();
+        return favoriteRepository.findFavoriteFoodsByUserId(userId);
+
+
     }
 
     public Favorite addFavorite(Long userId, Long foodId) {
@@ -30,20 +54,17 @@ public class FavoriteService {
                 .orElseThrow(() -> new NoSuchFoodExistsException("User id not found: " + userId));
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new NoSuchFoodExistsException("Food id not found: " + foodId));
-
-        Favorite favorite = new Favorite(user, food);
+        Instant createdAt = Instant.now();
+        Favorite favorite = new Favorite(user, food, createdAt);
         return favoriteRepository.save(favorite);
     }
 
-    public List<Food> getFavoritesByUser(Long userId) {
-        List<Favorite> favorites = favoriteRepository.findByUserId(userId);
+    public void removeFavorite(Long userIdFromToken, Long foodId) {
+        Favorite fav = favoriteRepository
+                .findByUserIdAndFoodId(userIdFromToken, foodId);
+//                .orElseThrow();
 
-        return favorites.stream()
-                .map(Favorite::getFood)
-                .toList();
-    }
+        favoriteRepository.delete(fav);
 
-    public void removeFavorite(Long userId, Long foodId) {
-        favoriteRepository.deleteByUserIdAndFoodId(userId, foodId);
     }
 }

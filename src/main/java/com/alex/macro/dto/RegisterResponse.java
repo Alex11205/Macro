@@ -1,6 +1,6 @@
 package com.alex.macro.dto;
 
-public record UserResponse(
+public record RegisterResponse(
         Long id,
         String username,
         String email

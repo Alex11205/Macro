@@ -28,6 +28,14 @@ public class FoodService {
     }
 
     public Food createFood(Food food) {
+        String name = food.getName().trim();
+
+        if (foodRepository.existsByName(name)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Food already exists"
+            );
+        }
         return foodRepository.save(food);
     }
 

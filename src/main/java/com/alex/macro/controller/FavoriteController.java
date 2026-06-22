@@ -1,6 +1,7 @@
 package com.alex.macro.controller;
 
 
+import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.model.Food;
 import com.alex.macro.service.FavoriteService;
 import com.alex.macro.service.UserService;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/favorites")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:3000")
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
@@ -19,21 +20,24 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
-    @GetMapping("/{userId}/favorites")
-    public List<Food> getFavorites(@PathVariable Long userId) {
+    @GetMapping("/favoriteList")
+    public List<FavoriteFood> getFavorites(@RequestHeader("Authorization") String token) {
+        Long userId = Long.parseLong(token);
         return favoriteService.getFavoritesByUser(userId);
     }
 
-    @PostMapping("/{userId}/favorites/{foodId}")
-    public String addFavorite(@PathVariable Long userId,
-                            @PathVariable Long foodId) {
+    @PostMapping("/favorites/{foodId}")
+    public String addFavorite(@PathVariable Long foodId,
+                              @RequestHeader("Authorization") String token) {
+        Long userId = Long.parseLong(token);
         favoriteService.addFavorite(userId, foodId);
         return "UserId " + userId + " and foodId " + foodId + " has been successfully created!";
     }
 
-    @DeleteMapping("/{userId}/favorites/{foodId}")
-    public String removeFavorite(@PathVariable Long userId,
-                               @PathVariable Long foodId) {
+    @DeleteMapping("/favorites/{foodId}")
+    public String removeFavorite(@PathVariable Long foodId,
+                                 @RequestHeader("Authorization") String token) {
+        Long userId = Long.parseLong(token);
         favoriteService.removeFavorite(userId, foodId);
         return "UserId " + userId + " and foodId " + foodId + " has been successfully deleted!";
     }

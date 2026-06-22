@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+import java.time.LocalDate;
+
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class Favorite {
@@ -20,8 +23,11 @@ public class Favorite {
     @JoinColumn(name = "food_id", nullable = false)
     private Food food;
 
-    public Favorite(User user, Food food) {
+    private Instant createdAt;
+
+    public Favorite(User user, Food food, Instant createdAt) {
         this.user = user;
         this.food = food;
+        this.createdAt = createdAt;
     }
 }

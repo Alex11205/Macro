@@ -1,13 +1,11 @@
 package com.alex.macro.service;
 
-import com.alex.macro.dto.UserRequest;
-import com.alex.macro.dto.UserResponse;
-import com.alex.macro.exceptions.NoSuchFoodExistsException;
+import com.alex.macro.dto.LoginRequest;
+import com.alex.macro.dto.LoginResponse;
+import com.alex.macro.dto.RegisterRequest;
+import com.alex.macro.dto.RegisterResponse;
 import com.alex.macro.exceptions.NoSuchUserExistsException;
-import com.alex.macro.model.Favorite;
-import com.alex.macro.model.Food;
 import com.alex.macro.model.User;
-import com.alex.macro.repository.FoodRepository;
 import com.alex.macro.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,22 +38,45 @@ public class UserService {
 //        return userRepository.save(user);
 //    }
 
-    public UserResponse registerUser(UserRequest request) {
+    public RegisterResponse registerUser(RegisterRequest request) {
         // Map DTO to Entity
-        User user = new User();
-        user.setUsername(request.username());
-        user.setEmail(request.email());
-        user.setPassword(request.password());
+            String username = request.username().trim();
 
-        User savedUser = userRepository.save(user);
+            if (userRepository.existsByUsername(username)) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Username already exists"
+                );
+            }
 
-        // Map Entity back to safe Response DTO
-        return new UserResponse(
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getEmail()
-        );
+            User user = new User();
+            user.setUsername(username);
+            user.setEmail(request.email());
+            user.setPassword(request.password());
+
+            User savedUser = userRepository.save(user);
+
+            // Map Entity back to safe Response DTO
+            return new RegisterResponse(
+                    savedUser.getId(),
+                    savedUser.getUsername(),
+                    savedUser.getEmail()
+            );
+
+
     }
+
+    public LoginResponse authenticate(LoginRequest loginRequest) {
+
+        User user = getUserByUsername(loginRequest.username());
+        if (!user.getPassword().equals(loginRequest.password())) {
+            throw new RuntimeException("Invalid password");
+        }
+            String mockToken = String.valueOf(user.getId());
+
+            return new LoginResponse(mockToken, loginRequest.username());
+        }
+
 
     public User updateUser(Long userId, User updatedUser) {
         User existingUser = userRepository.findById(userId)

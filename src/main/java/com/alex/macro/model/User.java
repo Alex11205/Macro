@@ -5,13 +5,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_users_username", columnNames = "username")
+        }
+)
 @Getter @Setter @NoArgsConstructor
 public class User {
 
@@ -19,13 +25,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotEmpty(message = "Qualifications cannot be empty")
+    @NotEmpty(message = "Username cannot be empty")
+    @Column(nullable = false)
     private String username;
 
-//    @Email(message = "Email should be valid!")
+    @Email(message = "Email should be valid!")
     private String email;
 
-//    @Min(value = 8, message = "Password length must be at least 8!")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
     public User(String username, String email, String password) {
