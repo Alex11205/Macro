@@ -9,6 +9,7 @@ import com.alex.macro.model.User;
 import com.alex.macro.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -52,7 +54,9 @@ public class UserService {
             User user = new User();
             user.setUsername(username);
             user.setEmail(request.email());
-            user.setPassword(request.password());
+
+            String hashedPassword = passwordEncoder.encode(request.password());
+            user.setPassword(hashedPassword);
 
             User savedUser = userRepository.save(user);
 
@@ -69,7 +73,9 @@ public class UserService {
     public LoginResponse authenticate(LoginRequest loginRequest) {
 
         User user = getUserByUsername(loginRequest.username());
-        if (!user.getPassword().equals(loginRequest.password())) {
+
+//        if (!user.getPassword().equals(loginRequest.password())) {
+        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
             String mockToken = String.valueOf(user.getId());

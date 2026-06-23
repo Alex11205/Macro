@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
@@ -82,7 +82,6 @@ public class UserController {
         Long userId = Long.parseLong(token);
         return ResponseEntity.ok(
                 userService.updateUser(userId, updatedUser));
-
     }
 
     @DeleteMapping("/{id}")
