@@ -28,7 +28,7 @@ export default function SavedPage() {
           method: "GET",
           headers: {
         "Content-Type": "application/json",
-        "Authorization": token,
+        "Authorization": `Bearer ${token}`,
       },
         });
 
@@ -133,7 +133,7 @@ const totals = trackedItems.reduce(
         method: isSaved ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token,
+          "Authorization": `Bearer ${token}`,
         },
 
         

@@ -35,20 +35,22 @@ export default function Foods() {
     // const stored = JSON.parse(localStorage.getItem("savedCards") || "[]");
     // setSavedItems(stored);
     async function fetchFoodData() {
+      const token = localStorage.getItem("token");
       try {
         const allFoodResponse = await fetch("http://localhost:8080/api/foods", {
           method: "GET",
           headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
         });
 
-        const token = localStorage.getItem("token");
+        
         const userFoodResponse = await fetch("http://localhost:8080/api/favorites/favoriteList", {
           method: "GET",
           headers: {
         "Content-Type": "application/json",
-        "Authorization": token,
+        "Authorization": `Bearer ${token}`,
       },
         });
 
@@ -97,7 +99,7 @@ export default function Foods() {
         method: isSaved ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token,
+          "Authorization": `Bearer ${token}`,
         },
 
         
@@ -155,7 +157,7 @@ export default function Foods() {
             key={card.id}
             {...card}
             isSaved={savedItems.some((item) => item.id === card.id)}
-            userId={localStorage.getItem("token")}
+            // userId={localStorage.getItem("token").username}
             onToggleSave={toggleSave}
             hasButton={false}
             // isWeightReadOnly={true}

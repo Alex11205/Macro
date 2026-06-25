@@ -5,23 +5,33 @@ import { use, useEffect, useState } from "react";
 import ProtectedPage from "@/components/ProtectedPage";
 import { useRouter } from "next/router";
 
+
 export default function Profile() {
 
-
-type profile = {
-  id: bigint;
+  type UserProfile = {
+  id: number;
   username: string;
   email: string;
-  password: string
- 
+  role: "USER" | "ADMIN";
 };
 
-   const [userProfile, setUserProfile] = useState<profile>({
-    id: null,
-  username: '',
-  email: '',
-  password: '',
-   });
+// type profile = {
+//   id: bigint;
+//   username: string;
+//   email: string;
+//   password: string
+ 
+// };
+
+  //  const [userProfile, setUserProfile] = useState<profile>({
+  //   id: BigInt(0),
+  // username: '',
+  // email: '',
+  // password: '',
+  //  });
+
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+const [users, setUsers] = useState<UserProfile[]>([]);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -34,7 +44,7 @@ type profile = {
 //      const [wrongEmailMessage, setWrongEmailMessage] = useState('');
 //    const [wrongPasswordMessage, setWrongPasswordMessage] = useState('');
 
-     const [isSubmit, setIsSubmit] = useState(false);
+    //  const [isSubmit, setIsSubmit] = useState(false);
 
      function handleLogOut(){
         localStorage.removeItem("token");
@@ -47,35 +57,39 @@ type profile = {
          // setSavedItems(stored);
          async function fetchUserData() {
            try {
-            
-     
+
             const token = localStorage.getItem("token");
             
              const userDataResponse = await fetch("http://localhost:8080/api/users/profile", {
                method: "GET",
                headers: {
              "Content-Type": "application/json",
-             "Authorization": token,
+             "Authorization": `Bearer ${token}`,
            },
              });
      
+             if (userDataResponse.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+
          if (!userDataResponse.ok) {
            const userDataErrorText = await userDataResponse.text();
-           console.error("User food FETCH FAILED:", userDataResponse.status, userDataErrorText);
+           console.error("User FETCH FAILED:", userDataResponse.status, userDataErrorText);
         //    alert("Fetching user data failed");
            return;
          }
 
-         if (userDataResponse.status === 401) {
-  localStorage.removeItem("token");
-  router.replace("/Signin");}
+         
      
      
      
          const userData = await userDataResponse.json();
-         setUserProfile(userData);
+         
+         setProfile(userData);
          console.log("User data Fetch response: ", userData);
-     
+     if (userData.role === "ADMIN") {
+  fetchUser();
+}
          // alert("Food fetch successfully!");
            } catch (err) {
              console.error("ERROR:", err);
@@ -86,43 +100,92 @@ type profile = {
        }, []);
 
 
+
+       async function fetchUser() {
+           try {
+
+            const token = localStorage.getItem("token");
+            
+             const userDataResponse = await fetch("http://localhost:8080/api/users", {
+               method: "GET",
+               headers: {
+             "Content-Type": "application/json",
+             "Authorization": `Bearer ${token}`,
+           },
+             });
+
+              if (userDataResponse.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+     
+         if (!userDataResponse.ok) {
+           const userDataErrorText = await userDataResponse.text();
+           console.error("User Table FETCH FAILED:", userDataResponse.status, userDataErrorText);
+        //    alert("Fetching user data failed");
+           return;
+         }
+
+        
+     
+     
+     
+         const userTableData = await userDataResponse.json();
+         
+         setUsers(userTableData);
+         console.log("User data Fetch response: ", userTableData);
+     
+
+         // alert("Food fetch successfully!");
+           } catch (err) {
+             console.error("ERROR:", err);
+        //  alert("fetch failed");
+           }
+         }
+         
+       
+
+
   async function handleSubmitEmail(event: React.SubmitEvent) {
     event.preventDefault();
 
-    if(oldEmail !== userProfile.email)
-        setIsEmailWrong(true);
-        else {
-            setIsEmailWrong(false);
+    // if(oldEmail !== userProfile.email)
+    //     
+    //     else {
+    //         setIsEmailWrong(false);
             const token = localStorage.getItem("token");
             try {
-    const res = await fetch("http://localhost:8080/api/users", {
+    const res = await fetch("http://localhost:8080/api/users/changeEmail", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": token,
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id: userProfile.id, 
-        username: userProfile.username, 
-        email: newEmail, 
-        password: userProfile.password}),
+        
+        oldEmail: oldEmail,
+        newEmail: newEmail, 
+      }),
     });
 
+    if (res.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+
     if (!res.ok) {
+      setIsEmailWrong(true);
       const errorText = await res.text();
       console.error("Changing email FAILED:", res.status, errorText);
     //   alert("Changing email failed");
       return;
     }
-    if (res.status === 401) {
-  localStorage.removeItem("token");
-  router.replace("/Signin");}
+    
      
 
     const data = await res.json();
 
     console.log("Change email RESPONSE:", data);
-    // alert("Email Changed successfully!");
+
+    alert("Email Changed successfully!");
       window.location.reload();
     
     // router.push("/foods");
@@ -131,49 +194,51 @@ type profile = {
     // alert("fetch failed");
   }
 
-  };
+  }
 
-        }
+        
     
 
  async function handleSubmitPassword(event: React.SubmitEvent) {
     event.preventDefault();
 
-    if(oldPassword !== userProfile.password)
-        setIsPasswordWrong(true);
-        else {
-            setIsPasswordWrong(false);
+    // if(oldPassword !== userProfile.password)
+    //     
+    //     else {
+    //         setIsPasswordWrong(false);
             const token = localStorage.getItem("token");
             try {
-    const res = await fetch("http://localhost:8080/api/users", {
+    const res = await fetch("http://localhost:8080/api/users/changePassword", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": token,
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id: userProfile.id, 
-        username: userProfile.username, 
-        email: userProfile.email, 
-        password: newPassword}),
+        oldPassword: oldPassword,
+        newPassword: newPassword, }),
     });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("Changing password FAILED:", res.status, errorText);
-    //   alert("Changing password failed");
-      return;
-    }
 
     if (res.status === 401) {
   localStorage.removeItem("token");
   router.replace("/Signin");}
-     
+
+    if (!res.ok) {
+  
+      setIsPasswordWrong(true);
+      const errorText = await res.text();
+      // console.error("Changing password FAILED:", res.status, errorText);
+      console.log(errorText || "Changing password failed");
+    //   alert("Changing password failed");
+      return;
+    }
+
+
 
     const data = await res.json();
 
     console.log("Change password RESPONSE:", data);
-    // alert("Password Changed successfully!");
+    alert("Password Changed successfully!");
      window.location.reload();
     
     // router.push("/foods");
@@ -182,19 +247,85 @@ type profile = {
     // alert("fetch failed");
   }
 
-  };
+  }
 
-        }
+  async function handleDeleteUser(userId: number) {
+  if (!confirm("Delete this user?")) return;
+
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`http://localhost:8080/api/users/${userId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    alert("Delete failed");
+    return;
+  }
+
+  setUsers((current) => current.filter((user) => user.id !== userId));
+}
+
+        
 
   return (
+    
     <ProtectedPage>
+      {profile?.role === "ADMIN" ? 
+      (
+  <div>
+    <div className="flex justify-between items-center mb-6">
 
+      <h3 className="text-4xl font-bold text-gray-800 mb-6">Hello, {profile?.username}</h3>
+      <button onClick={handleLogOut} className=" py-1 px-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out" 
+        type="button">Log out
+        
+        </button>
+      </div>
+        <table className="w-full border">
+  <thead>
+    <tr>
+      <th className="border p-2">Username</th>
+      <th className="border p-2">Email</th>
+      <th className="border p-2">Role</th>
+      <th className="border p-2">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {users.map((user) => (
+      <tr key={user.id}>
+        <td className="border p-2">{user.username}</td>
+        <td className="border p-2">{user.email}</td>
+        <td className="border p-2">{user.role}</td>
+        <td className="border p-2">
+          {user.role === "USER" && 
+          <button
+            type="button"
+            onClick={() => handleDeleteUser(user.id)}
+            className="rounded bg-red-600 px-3 py-1 text-white"
+          >
+            Delete
+          </button>}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+      
+
+    </div>
+) 
+: (
     <div>
 
       <main className="max-w-5xl mx-auto p-6 text-black">
     <div className="flex justify-between items-center mb-6">
 
-      <h3 className="text-4xl font-bold text-gray-800 mb-6">Hello, {userProfile.username}</h3>
+      <h3 className="text-4xl font-bold text-gray-800 mb-6">Hello, {profile?.username}</h3>
       <button onClick={handleLogOut} className=" py-1 px-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out" 
         type="button">Log out
         
@@ -222,7 +353,7 @@ type profile = {
         placeholder="Old email"
         required
         type="email"
-        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
         title="Please enter valid email!" 
       />
       <label className="block text-sm/6 font-medium text-black">Your new email:</label>
@@ -235,7 +366,7 @@ type profile = {
         placeholder="New email"
         required
         type="email"
-        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
         title="Please enter valid email!" 
       />
       </div>
@@ -291,6 +422,7 @@ type profile = {
       
       </main>
     </div>
+    )}
     </ProtectedPage>
   );
 

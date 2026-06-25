@@ -14,7 +14,7 @@ export default function Signin() {
    // Use a state to save username that will be submitted, the initiating value is 'Guest'
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [message, setMessage] = useState("");
 
 async function handleLogin(event: FormEvent<HTMLFormElement>) {
   event.preventDefault();
@@ -28,6 +28,8 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
       body: JSON.stringify({ username, password }),
     });
 
+    if(res.status === 403)
+      setMessage("Username or password is incorrect!")
     if (!res.ok) {
       const errorText = await res.text();
       console.error("LOGIN FAILED:", res.status, errorText);
@@ -84,6 +86,7 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
         pattern=".{8,}" 
         title="Password must be at least 8 characters!" 
       />
+      {message && <p className="text-lg text-red-700">{message}</p>}
       </div>
         <button className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out" 
         type="submit">Sign in</button>

@@ -53,7 +53,7 @@ export default function AddFoodForm({
       protein: Number(formData.protein),
       fat: Number(formData.fat),
       calorie: Number(formData.calorie),
-      createdBy: localStorage.getItem("token").trim(),
+      createdBy: "",
     };
 
     if (!payload.name) {
@@ -80,7 +80,7 @@ export default function AddFoodForm({
       };
 
       if (token) {
-        headers.Authorization = token;
+        headers.Authorization =  `Bearer ${token}`;
       }
 
       const response = await fetch(apiUrl, {
