@@ -2,9 +2,12 @@ package com.alex.macro.controller;
 
 
 import com.alex.macro.model.Food;
+import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +36,9 @@ public class FoodController {
     }
 
     @PostMapping
-    public ResponseEntity<Food> createFood(@RequestBody Food food) {
+    public ResponseEntity<Food> createFood(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @RequestBody Food food) {
+        food.setCreatedBy(userDetails.getUsername());
         return ResponseEntity.ok(
                 foodService.createFood(food));
     }

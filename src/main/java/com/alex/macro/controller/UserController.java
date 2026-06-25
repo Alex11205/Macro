@@ -1,15 +1,16 @@
 package com.alex.macro.controller;
 
 
-import com.alex.macro.dto.LoginRequest;
-import com.alex.macro.dto.LoginResponse;
-import com.alex.macro.dto.RegisterRequest;
-import com.alex.macro.dto.RegisterResponse;
+import com.alex.macro.dto.*;
 import com.alex.macro.model.User;
+import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.service.UserService;
+import io.jsonwebtoken.Jwt;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,14 +28,14 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserAdminResponse>> getAllUsers() {
         return ResponseEntity.ok(
                 userService.getAllUsers());
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<User> getUser(@RequestHeader("Authorization") String token) {
-        Long userId = Long.parseLong(token);
+    public ResponseEntity<UserAdminResponse> getUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getId();
         return ResponseEntity.ok(
                 userService.getUserById(userId));
     }
@@ -76,12 +77,21 @@ public class UserController {
 
 
 
-    @PutMapping
-    public ResponseEntity<User> replaceUser( @RequestHeader("Authorization") String token,
-                                             @RequestBody User updatedUser) {
-        Long userId = Long.parseLong(token);
-        return ResponseEntity.ok(
-                userService.updateUser(userId, updatedUser));
+    @PutMapping("/changeEmail")
+    public ResponseEntity<String> changeEmail(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                            @RequestBody ChangeEmailRequest request) {
+        String username = userDetails.getUsername();
+        userService.changeEmail(request, username);
+        return ResponseEntity.ok("Password changed successfully!");
+    }
+
+    @PutMapping("/changePassword")
+    public ResponseEntity<String> changePassword( @AuthenticationPrincipal CustomUserDetails userDetails,
+                                             @RequestBody ChangePasswordRequest request) {
+        String username = userDetails.getUsername();
+        userService.changePassword(request, username);
+
+        return ResponseEntity.ok("Email changed successfully!");
     }
 
     @DeleteMapping("/{id}")

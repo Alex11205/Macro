@@ -1,14 +1,18 @@
 package com.alex.macro.service;
 
-import com.alex.macro.dto.LoginRequest;
-import com.alex.macro.dto.LoginResponse;
-import com.alex.macro.dto.RegisterRequest;
-import com.alex.macro.dto.RegisterResponse;
+import com.alex.macro.dto.*;
 import com.alex.macro.exceptions.NoSuchUserExistsException;
+import com.alex.macro.model.Role;
 import com.alex.macro.model.User;
 import com.alex.macro.repository.UserRepository;
+import com.alex.macro.security.CustomUserDetails;
+import com.alex.macro.security.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,13 +26,26 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    private final JwtService jwtService;
+
+    private final AuthenticationManager authenticationManager;
+
+
+    public List<UserAdminResponse> getAllUsers() {
+        return userRepository.findAllUsers();
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
+    public UserAdminResponse getUserById(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserExistsException("User not found with id " + id));
+        return new UserAdminResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole()
+        );
+//        return userRepository.findById(id)
+//                .orElseThrow(() -> new NoSuchUserExistsException("User not found with id " + id));
     }
 
     public User getUserByUsername(String username) {
@@ -54,6 +71,7 @@ public class UserService {
             User user = new User();
             user.setUsername(username);
             user.setEmail(request.email());
+            user.setRole(Role.USER);
 
             String hashedPassword = passwordEncoder.encode(request.password());
             user.setPassword(hashedPassword);
@@ -72,29 +90,77 @@ public class UserService {
 
     public LoginResponse authenticate(LoginRequest loginRequest) {
 
-        User user = getUserByUsername(loginRequest.username());
+
+
+//        User user = getUserByUsername(loginRequest.username());
 
 //        if (!user.getPassword().equals(loginRequest.password())) {
-        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+//        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
+//            throw new RuntimeException("Invalid password");
+//        }
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.username(),
+                        loginRequest.password()
+                )
+        );
+
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+
+        String token = jwtService.generateToken(principal);
+
+        return new LoginResponse(token, loginRequest.username());
         }
-            String mockToken = String.valueOf(user.getId());
 
-            return new LoginResponse(mockToken, loginRequest.username());
+
+    public void changeEmail(ChangeEmailRequest request, String username) {
+        User existingUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        if(!request.oldEmail().equals(existingUser.getEmail())) {
+            System.out.println("Wrong Email");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The current email you entered is incorrect."
+            );
         }
 
 
-    public User updateUser(Long userId, User updatedUser) {
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id " + userId));
+        if(request.newEmail().equals(existingUser.getEmail()))
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "New email cannot be the same as your current email."
+            );
 
-        // Overwrite old values with new values
-        existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setEmail(request.newEmail());
 
-        // Save changes back to the database
-        return userRepository.save(existingUser);
+        userRepository.save(existingUser);
+    }
+
+    public void changePassword(ChangePasswordRequest request, String username) {
+        User existingUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+
+        if (!passwordEncoder.matches(request.oldPassword(), existingUser.getPassword())) {
+            System.out.println("Wrong password");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The current password you entered is incorrect."
+            );
+        }
+
+        if (passwordEncoder.matches(request.newPassword(), existingUser.getPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "New password cannot be the same as your current password."
+            );
+        }
+
+        existingUser.setPassword(passwordEncoder.encode(request.newPassword()));
+
+        userRepository.save(existingUser);
     }
 
     public void deleteUser(Long id) {

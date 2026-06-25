@@ -35,6 +35,10 @@ public class User {
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
