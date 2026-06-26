@@ -28,7 +28,7 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
       body: JSON.stringify({ username, password }),
     });
 
-    if(res.status === 403)
+    if(res.status === 401)
       setMessage("Username or password is incorrect!")
     if (!res.ok) {
       const errorText = await res.text();

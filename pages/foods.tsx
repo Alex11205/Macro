@@ -118,7 +118,7 @@ export default function Foods() {
 
     } catch (error) {
       console.error(error);
-      // alert("Something went wrong. Please try again.");
+      alert("Something went wrong. Please try again.");
     }
 
     

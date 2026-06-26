@@ -90,8 +90,9 @@ export default function AddFoodForm({
       });
 
       if(response.status === 409) {
-        alert("Food already exists!");
+        setMessage("Food already exists!");
       }
+      
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText || "Food creation failed.");
@@ -104,7 +105,7 @@ export default function AddFoodForm({
       setMessage("Food added successfully!");
     } catch (error) {
       console.error(error);
-      setMessage("Something went wrong. Please try again.");
+      // setMessage("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

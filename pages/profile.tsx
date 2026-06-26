@@ -38,9 +38,11 @@ const [users, setUsers] = useState<UserProfile[]>([]);
   const [oldEmail, setOldEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
 
-    const [isEmailWrong, setIsEmailWrong] = useState(false);
-    const [isPasswordWrong, setIsPasswordWrong] = useState(false);
+    // const [isEmailWrong, setIsEmailWrong] = useState(false);
+    // const [isPasswordWrong, setIsPasswordWrong] = useState(false);
  const router = useRouter();
+ const [emailMessage, setEmailMessage] = useState("");
+ const [passwordMessage, setPasswordMessage] = useState("");
 //      const [wrongEmailMessage, setWrongEmailMessage] = useState('');
 //    const [wrongPasswordMessage, setWrongPasswordMessage] = useState('');
 
@@ -167,23 +169,37 @@ const [users, setUsers] = useState<UserProfile[]>([]);
       }),
     });
 
+     
+    
     if (res.status === 401) {
   localStorage.removeItem("token");
   router.replace("/Signin");}
 
+  if(res.status === 400) {
+      setEmailMessage("The current email you entered is incorrect.")
+    }
+
+    if(res.status === 409) {
+      setEmailMessage("New email cannot be the same as your current email.")
+    }
+
+ 
+
     if (!res.ok) {
-      setIsEmailWrong(true);
+      // setIsEmailWrong(true);
       const errorText = await res.text();
       console.error("Changing email FAILED:", res.status, errorText);
     //   alert("Changing email failed");
       return;
     }
+
+    
     
      
 
-    const data = await res.json();
+    // const data = await res.json();
 
-    console.log("Change email RESPONSE:", data);
+    // console.log("Change email RESPONSE:", data);
 
     alert("Email Changed successfully!");
       window.location.reload();
@@ -219,13 +235,23 @@ const [users, setUsers] = useState<UserProfile[]>([]);
         newPassword: newPassword, }),
     });
 
-    if (res.status === 401) {
+     if (res.status === 401) {
   localStorage.removeItem("token");
   router.replace("/Signin");}
 
+     if(res.status === 400) {
+      setPasswordMessage("The current password you entered is incorrect.")
+    }
+
+    if(res.status === 409) {
+      setPasswordMessage("New password cannot be the same as your current password.")
+    }
+
+   
+
     if (!res.ok) {
   
-      setIsPasswordWrong(true);
+      // setIsPasswordWrong(true);
       const errorText = await res.text();
       // console.error("Changing password FAILED:", res.status, errorText);
       console.log(errorText || "Changing password failed");
@@ -233,11 +259,12 @@ const [users, setUsers] = useState<UserProfile[]>([]);
       return;
     }
 
+  
 
 
-    const data = await res.json();
+    // const data = await res.json();
 
-    console.log("Change password RESPONSE:", data);
+    // console.log("Change password RESPONSE:", data);
     alert("Password Changed successfully!");
      window.location.reload();
     
@@ -369,8 +396,10 @@ const [users, setUsers] = useState<UserProfile[]>([]);
         // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
         title="Please enter valid email!" 
       />
+      
       </div>
-      {isEmailWrong && <p className="text-red-600">Old email is incorrect!</p>}
+      {/* {isEmailWrong && <p className="text-red-600">Old email is incorrect!</p>} */}
+      {emailMessage && <p className="text-lg text-red-700">{emailMessage}</p>}
         <button className=" py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out" 
         type="submit">Change</button>
         </div>
@@ -411,8 +440,9 @@ const [users, setUsers] = useState<UserProfile[]>([]);
         title="Password must be at least 8 characters!" 
         
       />
+      {passwordMessage && <p className="text-lg text-red-700">{passwordMessage}</p>}
       </div>
-      {isPasswordWrong && <p className="text-red-600">Old password is incorrect!</p>}
+      {/* {isPasswordWrong && <p className="text-red-600">Old password is incorrect!</p>} */}
         <button className="py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out" 
         type="submit">Change</button>
         </div>

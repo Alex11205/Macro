@@ -30,7 +30,7 @@ export default function Signup() {
     });
 
     if(res.status === 409) 
-      alert("Username already exists!");
+      setMessage("Username already exists!");
 
     if (!res.ok) {
       const errorText = await res.text();
@@ -104,6 +104,7 @@ export default function Signup() {
         title="Password must be at least 8 characters!"     
         
       />
+      {message && <p className="text-lg text-red-700">{message}</p>}
       </div>
         <button className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out" 
         type="submit">Sign up</button>
