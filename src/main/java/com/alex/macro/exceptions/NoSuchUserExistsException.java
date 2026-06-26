@@ -4,10 +4,9 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class NoSuchUserExistsException extends RuntimeException{
-    private String message;
 
-    public NoSuchUserExistsException(String msg) {
-        super(msg);
-        this.message = msg;
+
+    public NoSuchUserExistsException(String user) {
+        super(String.format("User '%s' cannot be found.", user));
     }
 }

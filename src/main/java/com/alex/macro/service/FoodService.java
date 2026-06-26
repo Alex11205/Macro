@@ -1,5 +1,6 @@
 package com.alex.macro.service;
 
+import com.alex.macro.exceptions.FoodAlreadyExistsException;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.model.Food;
 import com.alex.macro.repository.FoodRepository;
@@ -24,24 +25,21 @@ public class FoodService {
 
     public Food getFoodByName(String foodName) {
         return foodRepository.findByName(foodName)
-                .orElseThrow(() -> new NoSuchFoodExistsException("Food not found with name " + foodName));
+                .orElseThrow(() -> new NoSuchFoodExistsException(foodName));
     }
 
     public Food createFood(Food food) {
         String name = food.getName().trim();
 
         if (foodRepository.existsByName(name)) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Food already exists"
-            );
+            throw new FoodAlreadyExistsException(name);
         }
         return foodRepository.save(food);
     }
 
     public Food updateFood(String foodName, Food updatedFood) {
         Food existingFood = foodRepository.findByName(foodName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found with name " + foodName));
+                .orElseThrow(() -> new NoSuchFoodExistsException(foodName));
 
         // Overwrite old values with new values
         existingFood.setName(updatedFood.getName());

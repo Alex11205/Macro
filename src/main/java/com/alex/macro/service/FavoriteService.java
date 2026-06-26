@@ -2,6 +2,7 @@ package com.alex.macro.service;
 
 import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
+import com.alex.macro.exceptions.NoSuchUserExistsException;
 import com.alex.macro.model.Favorite;
 import com.alex.macro.model.Food;
 import com.alex.macro.model.User;
@@ -51,17 +52,17 @@ public class FavoriteService {
 
     public Favorite addFavorite(Long userId, Long foodId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchFoodExistsException("User id not found: " + userId));
+                .orElseThrow(() -> new NoSuchUserExistsException(String.valueOf(userId)));
         Food food = foodRepository.findById(foodId)
-                .orElseThrow(() -> new NoSuchFoodExistsException("Food id not found: " + foodId));
+                .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
         Instant createdAt = Instant.now();
         Favorite favorite = new Favorite(user, food, createdAt);
         return favoriteRepository.save(favorite);
     }
 
-    public void removeFavorite(Long userIdFromToken, Long foodId) {
+    public void removeFavorite(Long userId, Long foodId) {
         Favorite fav = favoriteRepository
-                .findByUserIdAndFoodId(userIdFromToken, foodId);
+                .findByUserIdAndFoodId(userId, foodId);
 //                .orElseThrow();
 
         favoriteRepository.delete(fav);

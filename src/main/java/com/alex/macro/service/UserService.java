@@ -1,7 +1,7 @@
 package com.alex.macro.service;
 
 import com.alex.macro.dto.*;
-import com.alex.macro.exceptions.NoSuchUserExistsException;
+import com.alex.macro.exceptions.*;
 import com.alex.macro.model.Role;
 import com.alex.macro.model.User;
 import com.alex.macro.repository.UserRepository;
@@ -37,7 +37,7 @@ public class UserService {
 
     public UserAdminResponse getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchUserExistsException("User not found with id " + id));
+                .orElseThrow(() -> new NoSuchUserExistsException(String.valueOf(id)));
         return new UserAdminResponse(
                 user.getId(),
                 user.getUsername(),
@@ -50,7 +50,7 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new NoSuchUserExistsException("User not found with username " + username));
+                .orElseThrow(() -> new NoSuchUserExistsException(username));
     }
 
 //    public User createUser(User user) {
@@ -62,10 +62,7 @@ public class UserService {
             String username = request.username().trim();
 
             if (userRepository.existsByUsername(username)) {
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT,
-                        "Username already exists"
-                );
+                throw new UserAlreadyExistsException(username);
             }
 
             User user = new User();
@@ -90,7 +87,10 @@ public class UserService {
 
     public LoginResponse authenticate(LoginRequest loginRequest) {
 
-
+        String username = loginRequest.username();
+        if (!userRepository.existsByUsername(username)) {
+            throw new NoSuchUserExistsException(username);
+        }
 
 //        User user = getUserByUsername(loginRequest.username());
 
@@ -116,22 +116,15 @@ public class UserService {
 
     public void changeEmail(ChangeEmailRequest request, String username) {
         User existingUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new NoSuchUserExistsException(username));
 
         if(!request.oldEmail().equals(existingUser.getEmail())) {
-            System.out.println("Wrong Email");
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "The current email you entered is incorrect."
-            );
+            throw new InvalidEmailException("The current email you entered is incorrect.");
         }
 
 
         if(request.newEmail().equals(existingUser.getEmail()))
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "New email cannot be the same as your current email."
-            );
+            throw new SameEmailException("New email cannot be the same as your current email.");
 
         existingUser.setEmail(request.newEmail());
 
@@ -140,21 +133,15 @@ public class UserService {
 
     public void changePassword(ChangePasswordRequest request, String username) {
         User existingUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new NoSuchUserExistsException(username));
 
 
         if (!passwordEncoder.matches(request.oldPassword(), existingUser.getPassword())) {
-            System.out.println("Wrong password");
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "The current password you entered is incorrect."
-            );
+            throw new InvalidPasswordException("The current password you entered is incorrect.");
         }
 
         if (passwordEncoder.matches(request.newPassword(), existingUser.getPassword())) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "New password cannot be the same as your current password."
+            throw new SamePasswordException("New password cannot be the same as your current password."
             );
         }
 
