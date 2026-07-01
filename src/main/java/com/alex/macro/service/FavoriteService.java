@@ -1,6 +1,7 @@
 package com.alex.macro.service;
 
 import com.alex.macro.dto.FavoriteFood;
+import com.alex.macro.dto.FavoriteResponse;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.exceptions.NoSuchUserExistsException;
 import com.alex.macro.model.Favorite;
@@ -50,22 +51,28 @@ public class FavoriteService {
 
     }
 
-    public Favorite addFavorite(Long userId, Long foodId) {
+    public FavoriteResponse addFavorite(Long userId, Long foodId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchUserExistsException(String.valueOf(userId)));
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
         Instant createdAt = Instant.now();
         Favorite favorite = new Favorite(user, food, createdAt);
-        return favoriteRepository.save(favorite);
+        favoriteRepository.save(favorite);
+        return new FavoriteResponse(user.getUsername(), food.getName(), createdAt);
     }
 
-    public void removeFavorite(Long userId, Long foodId) {
+    public FavoriteResponse removeFavorite(Long userId, Long foodId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserExistsException(String.valueOf(userId)));
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
         Favorite fav = favoriteRepository
                 .findByUserIdAndFoodId(userId, foodId);
 //                .orElseThrow();
 
         favoriteRepository.delete(fav);
+        return new FavoriteResponse(user.getUsername(), food.getName(), fav.getCreatedAt());
 
     }
 }

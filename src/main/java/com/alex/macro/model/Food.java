@@ -2,6 +2,7 @@ package com.alex.macro.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import lombok.Setter;
                 @UniqueConstraint(name = "uk_food_name", columnNames = "name")
         }
 )
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Food {
 
     @Id
@@ -37,15 +38,15 @@ public class Food {
 
     private String createdBy;
 
-    public Food(String name, Double carb, Double protein, Double fat, Double calorie, Double weight, String imageUrl, String createdBy) {
+    public Food(String name, Double carb, Double protein, Double fat, Double calorie, String createdBy) {
 
         this.name = name;
         this.carb = carb;
         this.protein = protein;
         this.fat = fat;
         this.calorie = calorie;
-        this.weight = weight;
-        this.imageUrl = imageUrl;
+//        this.weight = weight;
+//        this.imageUrl = imageUrl;
         this.createdBy = createdBy;
     }
 

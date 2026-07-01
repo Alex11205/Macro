@@ -74,30 +74,27 @@ public class UserController {
 
     }
 
-
-
-
     @PutMapping("/changeEmail")
     public ResponseEntity<String> changeEmail(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @RequestBody ChangeEmailRequest request) {
+                                              @Valid @RequestBody ChangeEmailRequest request) {
         String username = userDetails.getUsername();
         userService.changeEmail(request, username);
-        return ResponseEntity.ok("Password changed successfully!");
+        return ResponseEntity.ok("Email changed successfully!");
     }
 
     @PutMapping("/changePassword")
     public ResponseEntity<String> changePassword( @AuthenticationPrincipal CustomUserDetails userDetails,
-                                             @RequestBody ChangePasswordRequest request) {
+                                                  @Valid @RequestBody ChangePasswordRequest request) {
         String username = userDetails.getUsername();
         userService.changePassword(request, username);
 
-        return ResponseEntity.ok("Email changed successfully!");
+        return ResponseEntity.ok("Password changed successfully!");
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return "User with id " + id + " has been successfully deleted!";
+        return ResponseEntity.ok("User with id " + id + " has been successfully deleted!");
     }
 
 

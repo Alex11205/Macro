@@ -1,5 +1,7 @@
 package com.alex.macro.repository;
 
+import com.alex.macro.dto.FavoriteFood;
+import com.alex.macro.dto.FoodResponse;
 import com.alex.macro.model.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -8,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
@@ -16,6 +19,22 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 
 //    @Transactional
 //    Optional<Food> deleteByName(String name);
+
+    @Query("""
+        SELECT new com.alex.macro.dto.FoodResponse(
+        
+            food.id,
+            food.name,
+            food.carb,
+            food.protein,
+            food.fat,
+            food.calorie,
+            food.imageUrl,
+            food.createdBy
+        )  
+        FROM Food food
+""")
+    List<FoodResponse> findAllFoods();
 
     @Transactional
     @Modifying

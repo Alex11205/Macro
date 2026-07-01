@@ -77,7 +77,7 @@ public class UserService {
 
             // Map Entity back to safe Response DTO
             return new RegisterResponse(
-                    savedUser.getId(),
+//                    savedUser.getId(),
                     savedUser.getUsername(),
                     savedUser.getEmail()
             );
@@ -110,7 +110,7 @@ public class UserService {
 
         String token = jwtService.generateToken(principal);
 
-        return new LoginResponse(token, loginRequest.username());
+            return new LoginResponse(token, loginRequest.username());
         }
 
 

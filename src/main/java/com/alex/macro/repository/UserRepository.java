@@ -1,6 +1,5 @@
 package com.alex.macro.repository;
 
-import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.dto.UserAdminResponse;
 import com.alex.macro.model.Food;
 import com.alex.macro.model.User;

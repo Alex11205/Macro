@@ -49,7 +49,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.PUT,"/api/users/changeEmail", "/api/users/changePassword").hasRole("USER")
                         .requestMatchers(HttpMethod.GET,"/api/users/profile", "/api/foods").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/foods").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/api/foods").hasAnyRole("USER", "ADMIN")
 //                        .requestMatchers("/api/favorites/favorites/{foodId}", "/api/favorites/favoriteList").hasRole("USER")
                                 .requestMatchers("/api/favorites/**").hasRole("USER")
 

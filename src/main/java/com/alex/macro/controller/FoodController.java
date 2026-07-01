@@ -1,10 +1,15 @@
 package com.alex.macro.controller;
 
 
+import com.alex.macro.dto.CreateFoodRequest;
+import com.alex.macro.dto.CreateFoodResponse;
+import com.alex.macro.dto.FoodResponse;
 import com.alex.macro.model.Food;
 import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.service.FoodService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +29,7 @@ public class FoodController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Food>> getAllFoods() {
+    public ResponseEntity<List<FoodResponse>> getAllFoods() {
         return ResponseEntity.ok(
                 foodService.getAllFoods());
     }
@@ -36,11 +41,11 @@ public class FoodController {
     }
 
     @PostMapping
-    public ResponseEntity<Food> createFood(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                           @RequestBody Food food) {
-        food.setCreatedBy(userDetails.getUsername());
-        return ResponseEntity.ok(
-                foodService.createFood(food));
+    public ResponseEntity<CreateFoodResponse> createFood(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                         @Valid @RequestBody CreateFoodRequest request) {
+        CreateFoodResponse response = foodService.createFood(request, userDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(response);
     }
 
     @PutMapping("/{foodName}")
@@ -52,9 +57,9 @@ public class FoodController {
     }
 
     @DeleteMapping("/{foodName}")
-    public String deleteFood(@PathVariable String foodName) {
+    public ResponseEntity<String> deleteFood(@PathVariable String foodName) {
         foodService.deleteFood(foodName);
-        return "Food with name " + foodName + " has been successfully deleted!";
+        return ResponseEntity.ok("Food with name " + foodName + " has been successfully deleted!");
     }
 
 

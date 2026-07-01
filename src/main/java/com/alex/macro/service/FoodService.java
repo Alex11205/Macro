@@ -1,5 +1,8 @@
 package com.alex.macro.service;
 
+import com.alex.macro.dto.CreateFoodRequest;
+import com.alex.macro.dto.CreateFoodResponse;
+import com.alex.macro.dto.FoodResponse;
 import com.alex.macro.exceptions.FoodAlreadyExistsException;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.model.Food;
@@ -19,8 +22,8 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
-    public List<Food> getAllFoods() {
-        return foodRepository.findAll();
+    public List<FoodResponse> getAllFoods() {
+        return foodRepository.findAllFoods();
     }
 
     public Food getFoodByName(String foodName) {
@@ -28,13 +31,31 @@ public class FoodService {
                 .orElseThrow(() -> new NoSuchFoodExistsException(foodName));
     }
 
-    public Food createFood(Food food) {
-        String name = food.getName().trim();
-
+    public CreateFoodResponse createFood(CreateFoodRequest request, String username) {
+        String name = request.name().trim();
         if (foodRepository.existsByName(name)) {
             throw new FoodAlreadyExistsException(name);
         }
-        return foodRepository.save(food);
+
+        Food food = new Food(
+                request.name(),
+                request.carb(),
+                request.protein(),
+                request.fat(),
+                request.calorie(),
+                username
+        );
+
+        Food savedFood = foodRepository.save(food);
+
+        return new CreateFoodResponse(
+                savedFood.getName(),
+                savedFood.getCarb(),
+                savedFood.getProtein(),
+                savedFood.getFat(),
+                savedFood.getCalorie(),
+                savedFood.getCreatedBy()
+        );
     }
 
     public Food updateFood(String foodName, Food updatedFood) {
