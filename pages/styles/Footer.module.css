@@ -1,0 +1,106 @@
+.footer {
+  background: #1f2426;
+  color: #f5f5f5;
+  margin-top: 60px;
+  border-top: 1px solid #34393c;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 42px 24px 28px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 48px;
+}
+
+.brand {
+  max-width: 320px;
+}
+
+.logo {
+  margin: 0 0 10px;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: lowercase;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.tagline {
+  margin: 0 0 24px;
+  color: #c5c8ca;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  text-transform: uppercase;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+}
+
+.socials a {
+  color: #ffffff;
+  border: 1px solid #4a4f52;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.socials a:hover {
+  background: #ffffff;
+  color: #1f2426;
+}
+
+.linksColumn h3 {
+  margin: 0 0 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.linksColumn ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linksColumn li {
+  margin-bottom: 10px;
+}
+
+.linksColumn a {
+  color: #d2d5d7;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.linksColumn a:hover {
+  color: #ffffff;
+}
+
+.bottom {
+  border-top: 1px solid #34393c;
+  padding: 16px 24px 20px;
+  text-align: center;
+}
+
+.bottom p {
+  margin: 0;
+  color: #a9afb3;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .brand {
+    max-width: 100%;
+  }
+}
