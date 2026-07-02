@@ -244,7 +244,7 @@ public class FavoriteControllerTest {
 
         mockMvc.perform(delete("/api/favorites/favorites/2")
                         .with(user(customUserDetails)))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value(favoriteResponse.username()))
                 .andExpect(jsonPath("$.foodName").value(favoriteResponse.foodName()));
     }

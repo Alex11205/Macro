@@ -163,11 +163,11 @@ public class UserServiceUnitTest {
 
         LoginRequest loginRequest = new LoginRequest("Username", "raw_password");
 
-        LoginResponse loginResponse = new LoginResponse("jwt_token", "Username");
-
-        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
-
-        Authentication authentication = mock(Authentication.class);
+//        LoginResponse loginResponse = new LoginResponse("jwt_token", "Username");
+//
+//        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
+//
+//        Authentication authentication = mock(Authentication.class);
 
 
         when(userRepository.existsByUsername("Username")).thenReturn(true);
@@ -318,5 +318,18 @@ public class UserServiceUnitTest {
         });
 
         verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void deleteUser_ShouldThrowException_WhenUserNotExist() {
+        Long id = 1L;
+
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchUserExistsException.class, () -> {
+            userService.deleteUser(id);
+        });
+
+        verify(userRepository, never()).deleteById(any());
     }
 }

@@ -37,7 +37,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 """)
     List<FavoriteFood> findFavoriteFoodsByUserId(@Param("id") Long id);
 
-    Favorite findByUserIdAndFoodId(Long userId, Long foodId);
+    Optional<Favorite> findByUserIdAndFoodId(Long userId, Long foodId);
 
     @Transactional
     void deleteByUserIdAndFoodId(Long userId, Long foodId);

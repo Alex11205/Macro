@@ -46,7 +46,7 @@ public class FavoriteController {
                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getId();
         FavoriteResponse favoriteResponse = favoriteService.removeFavorite(userId, foodId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(favoriteResponse);
     }
 }

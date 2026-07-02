@@ -164,4 +164,17 @@ public class FoodServiceUnitTest {
 
         verify(foodRepository, never()).save(any(Food.class));
     }
+
+    @Test
+    void deleteFood_ShouldThrowException_WhenFoodNotExist() {
+        String foodName = "foodName";
+
+        when(foodRepository.existsByName(foodName)).thenReturn(false);
+
+        assertThrows(NoSuchFoodExistsException.class, () -> {
+            foodService.deleteFood(foodName);
+        });
+
+        verify(foodRepository, never()).deleteByName(any());
+    }
 }

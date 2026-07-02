@@ -68,8 +68,8 @@ public class FavoriteService {
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
         Favorite fav = favoriteRepository
-                .findByUserIdAndFoodId(userId, foodId);
-//                .orElseThrow();
+                .findByUserIdAndFoodId(userId, foodId)
+                .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
 
         favoriteRepository.delete(fav);
         return new FavoriteResponse(user.getUsername(), food.getName(), fav.getCreatedAt());
