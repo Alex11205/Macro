@@ -1,0 +1,21 @@
+services:
+  database:
+    image: postgres:16
+    container_name: macro-postgres
+    environment:
+      POSTGRES_DB: macrodb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - macro-postgres-data:/var/lib/postgresql/data
+
+    secrets:
+      - db_password
+volumes:
+  macro-postgres-data:
+
+secrets:
+  db_password:
+    file: ./db_password.txt

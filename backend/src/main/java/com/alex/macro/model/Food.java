@@ -2,6 +2,7 @@ package com.alex.macro.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Food name cannot be empty")
     @Column(nullable = false)
     private String name;
 

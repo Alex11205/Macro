@@ -5,6 +5,7 @@ import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.dto.FavoriteResponse;
 import com.alex.macro.model.Favorite;
 import com.alex.macro.model.Food;
+import com.alex.macro.repository.FavoriteRepository;
 import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.service.FavoriteService;
 import com.alex.macro.service.UserService;
@@ -27,9 +28,10 @@ public class FavoriteController {
     }
 
     @GetMapping("/favoriteList")
-    public List<FavoriteFood> getFavorites(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<FavoriteFood>> getFavorites(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getId();
-        return favoriteService.getFavoritesByUser(userId);
+        return ResponseEntity.ok(
+                favoriteService.getFavoritesByUser(userId));
     }
 
     @PostMapping("/favorites/{foodId}")

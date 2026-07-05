@@ -139,6 +139,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(FavoriteAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleFavoriteAlreadyExists(FavoriteAlreadyExistsException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(FoodAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleFoodAlreadyExists(FoodAlreadyExistsException ex) {
         ErrorResponse error = new ErrorResponse(
