@@ -37,3 +37,11 @@ jobs:
 
       - name: Build and Test
         run: ./mvnw clean verify
+
+      - name: Print Failsafe Reports
+        if:  failure()
+        run: |
+          echo "==== failsafe txt reports ===="
+          find target/failsafe-reports -name "*.txt" -print -exec cat {} \;
+          echo "==== failsafe dumpstream reports ===="
+          find target/failsafe-reports -name "*.dumpstream" -print -exec cat {} \;
