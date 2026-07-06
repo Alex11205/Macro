@@ -16,9 +16,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-  defaults:
-    run:
-      working-directory: ./backend
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - name: Checkout Repository Code
