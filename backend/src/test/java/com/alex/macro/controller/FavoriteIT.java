@@ -1,7 +1,6 @@
 package com.alex.macro.controller;
 
 import com.alex.macro.dto.CreateFoodRequest;
-import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.dto.LoginRequest;
 import com.alex.macro.dto.RegisterRequest;
 import com.jayway.jsonpath.JsonPath;
@@ -10,14 +9,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class FavoriteIntegrationTest extends BaseIntegrationTest{
+public class FavoriteIT extends BaseIT {
 
     @Test
     void getFavoritesAddFavoritesRemoveFavoritesShouldWork() throws Exception{

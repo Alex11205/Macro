@@ -3,9 +3,7 @@ package com.alex.macro.controller;
 import com.alex.macro.dto.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,7 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class FoodIntegrationTest extends BaseIntegrationTest {
+public class FoodIT extends BaseIT {
 
     @Test
     void getAllFoodsAndCreateFoodShouldWork() throws Exception {
