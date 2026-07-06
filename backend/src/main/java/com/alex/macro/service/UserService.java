@@ -151,6 +151,10 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchUserExistsException(String.valueOf(id)));
+
         userRepository.deleteById(id);
     }
 

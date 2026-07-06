@@ -76,6 +76,9 @@ public class FoodService {
     }
 
     public void deleteFood(String foodName) {
+        if (!foodRepository.existsByName(foodName)) {
+            throw new NoSuchFoodExistsException(foodName);
+        }
         foodRepository.deleteByName(foodName);
     }
 

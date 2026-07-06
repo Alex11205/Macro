@@ -161,7 +161,7 @@ public class FavoriteServiceUnitTest {
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(foodRepository.findById(foodId)).thenReturn(Optional.of(food));
-        when(favoriteRepository.findByUserIdAndFoodId(userId, foodId)).thenReturn(favorite);
+        when(favoriteRepository.findByUserIdAndFoodId(userId, foodId)).thenReturn(Optional.of(favorite));
 
 //        willDoNothing().given(favoriteRepository).findByUserIdAndFoodId(userId, foodId);
         willDoNothing().given(favoriteRepository).delete(any());

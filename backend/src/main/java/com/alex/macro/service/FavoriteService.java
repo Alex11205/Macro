@@ -2,6 +2,7 @@ package com.alex.macro.service;
 
 import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.dto.FavoriteResponse;
+import com.alex.macro.exceptions.FavoriteAlreadyExistsException;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.exceptions.NoSuchUserExistsException;
 import com.alex.macro.model.Favorite;
@@ -46,9 +47,26 @@ public class FavoriteService {
 //        return favorites.stream()
 //                .map(Favorite::getFood)
 //                .toList();
-        return favoriteRepository.findFavoriteFoodsByUserId(userId);
+        return favoriteRepository.findFavoriteFoodsByUserId(userId)
+                .stream()
+                .map(this::toFavoriteFood)
+                .toList();
+
+//        return favoriteRepository.findFavoriteFoodsByUserId(userId);
 
 
+    }
+
+    private FavoriteFood toFavoriteFood(FavoriteRepository.FavoriteFoodProjection projection) {
+        return new FavoriteFood(
+                projection.getName(),
+                projection.getCarb(),
+                projection.getProtein(),
+                projection.getFat(),
+                projection.getCalorie(),
+                projection.getId(),
+                projection.getImageUrl()
+        );
     }
 
     public FavoriteResponse addFavorite(Long userId, Long foodId) {
@@ -58,6 +76,9 @@ public class FavoriteService {
                 .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
         Instant createdAt = Instant.now();
         Favorite favorite = new Favorite(user, food, createdAt);
+        if (favoriteRepository.findByUserIdAndFoodId(userId, foodId).isPresent()) {
+            throw new FavoriteAlreadyExistsException("This favorite Item already exists!");
+        }
         favoriteRepository.save(favorite);
         return new FavoriteResponse(user.getUsername(), food.getName(), createdAt);
     }
@@ -68,8 +89,8 @@ public class FavoriteService {
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
         Favorite fav = favoriteRepository
-                .findByUserIdAndFoodId(userId, foodId);
-//                .orElseThrow();
+                .findByUserIdAndFoodId(userId, foodId)
+                .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
 
         favoriteRepository.delete(fav);
         return new FavoriteResponse(user.getUsername(), food.getName(), fav.getCreatedAt());

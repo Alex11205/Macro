@@ -1,5 +1,6 @@
 package com.alex.macro.security;
 
+import com.alex.macro.model.Role;
 import com.alex.macro.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -30,6 +30,8 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
 
     if(res.status === 401)
       setMessage("Username or password is incorrect!")
+    if(res.status === 404)
+      setMessage(`Username '${username}' does not exist!`)
     if (!res.ok) {
       const errorText = await res.text();
       console.error("LOGIN FAILED:", res.status, errorText);

@@ -15,30 +15,44 @@ import java.util.Optional;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
 
+    public interface FavoriteFoodProjection {
+        String getName();
+        Double getCarb();
+        Double getProtein();
+        Double getFat();
+        Double getCalorie();
+        Long getId();
+        String getImageUrl();
+    }
 //    @Query("SELECT f.name, f.carb, f.protein, f.fat, f.calorie FROM User u INNER JOIN Favorite fa ON u.id = fa.user_id INNER JOIN Food f ON fa.food = f.id")
-//    @Query(value = "SELECT f.name AS name, f.carb AS carb, f.protein AS protein, f.fat AS fat, f.calorie AS calorie "
-//                  +"FROM favorite fa "
-//                  +"INNER JOIN food f ON fa.food_id = f.id "
-//                  +"WHERE fa.user_id = :sid"
-//                  , nativeQuery = true)
-@Query("""
-        SELECT new com.alex.macro.dto.FavoriteFood(
-            food.name,
-            food.carb,
-            food.protein,
-            food.fat,
-            food.calorie,
-            food.id,
-            food.imageUrl
-        )  
-        FROM Favorite favorite 
-        JOIN favorite.food food
-        WHERE favorite.user.id = :id
-""")
-    List<FavoriteFood> findFavoriteFoodsByUserId(@Param("id") Long id);
+    @Query(value = """
+            SELECT f.name AS name, f.carb AS carb, f.protein AS protein, f.fat AS fat, f.calorie AS calorie, f.id AS id, f.image_url as imageUrl 
+            FROM favorite fa 
+            INNER JOIN food f ON fa.food_id = f.id 
+            WHERE fa.user_id = :id 
+            ORDER BY f.id
+            """ , nativeQuery = true)
+    List<FavoriteFoodProjection> findFavoriteFoodsByUserId(@Param("id") Long id);
 
-    Favorite findByUserIdAndFoodId(Long userId, Long foodId);
 
-    @Transactional
-    void deleteByUserIdAndFoodId(Long userId, Long foodId);
+//@Query("""
+//        SELECT new com.alex.macro.dto.FavoriteFood(
+//            food.name,
+//            food.carb,
+//            food.protein,
+//            food.fat,
+//            food.calorie,
+//            food.id,
+//            food.imageUrl
+//        )
+//        FROM Favorite favorite
+//        JOIN favorite.food food
+//        WHERE favorite.user.id = :id
+//""")
+//    List<FavoriteFood> findFavoriteFoodsByUserId(@Param("id") Long id);
+
+    Optional<Favorite> findByUserIdAndFoodId(Long userId, Long foodId);
+
+//    @Transactional
+//    void deleteByUserIdAndFoodId(Long userId, Long foodId);
 }

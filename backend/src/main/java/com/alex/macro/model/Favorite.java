@@ -9,6 +9,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "uk_favorite_user_food",
+                columnNames = {"user_id", "food_id"}
+        )
+})
 @Getter @Setter @NoArgsConstructor
 public class Favorite {
     @Id

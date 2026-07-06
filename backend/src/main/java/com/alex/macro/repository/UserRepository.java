@@ -30,8 +30,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 """)
     List<UserAdminResponse> findAllUsers();
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM User u WHERE u.id = :id")
-    void deleteByName(@Param("id") Long Id);
+//    @Transactional
+//    @Modifying
+//    @Query("DELETE FROM User u WHERE u.id = :id")
+//    void deleteByName(@Param("id") Long Id);
 }
