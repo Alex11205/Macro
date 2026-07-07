@@ -8,19 +8,24 @@ export default function ProtectedPage({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [checking, setChecking] = useState(true);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      router.replace("/Signin");
-    } else {
-      setChecking(false);
+  // const [checking, setChecking] = useState(true);
+  const [hasToken] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
     }
-  }, []);
 
-  if (checking) return <div>Loading...</div>;
+    return Boolean(localStorage.getItem("token"));
+  });
+
+ useEffect(() => {
+    if (!hasToken) {
+      router.replace("/Signin");
+    }
+  }, [hasToken, router]);
+
+    if (!hasToken) {
+    return <div>Loading...</div>;
+  }
 
   return <>{children}</>;
 }
