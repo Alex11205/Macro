@@ -54,6 +54,47 @@ const [users, setUsers] = useState<UserProfile[]>([]);
 
      }
 
+        async function fetchUser() {
+           try {
+
+            const token = localStorage.getItem("token");
+            
+             const userDataResponse = await fetch("http://localhost:8080/api/users", {
+               method: "GET",
+               headers: {
+             "Content-Type": "application/json",
+             "Authorization": `Bearer ${token}`,
+           },
+             });
+
+              if (userDataResponse.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
+     
+         if (!userDataResponse.ok) {
+           const userDataErrorText = await userDataResponse.text();
+           console.error("User Table FETCH FAILED:", userDataResponse.status, userDataErrorText);
+        //    alert("Fetching user data failed");
+           return;
+         }
+
+        
+     
+     
+     
+         const userTableData = await userDataResponse.json();
+         
+         setUsers(userTableData);
+         console.log("User data Fetch response: ", userTableData);
+     
+
+         // alert("Food fetch successfully!");
+           } catch (err) {
+             console.error("ERROR:", err);
+        //  alert("fetch failed");
+           }
+         }
+
       useEffect(() => {
          // const stored = JSON.parse(localStorage.getItem("savedCards") || "[]");
          // setSavedItems(stored);
@@ -103,46 +144,7 @@ const [users, setUsers] = useState<UserProfile[]>([]);
 
 
 
-       async function fetchUser() {
-           try {
-
-            const token = localStorage.getItem("token");
-            
-             const userDataResponse = await fetch("http://localhost:8080/api/users", {
-               method: "GET",
-               headers: {
-             "Content-Type": "application/json",
-             "Authorization": `Bearer ${token}`,
-           },
-             });
-
-              if (userDataResponse.status === 401) {
-  localStorage.removeItem("token");
-  router.replace("/Signin");}
-     
-         if (!userDataResponse.ok) {
-           const userDataErrorText = await userDataResponse.text();
-           console.error("User Table FETCH FAILED:", userDataResponse.status, userDataErrorText);
-        //    alert("Fetching user data failed");
-           return;
-         }
-
-        
-     
-     
-     
-         const userTableData = await userDataResponse.json();
-         
-         setUsers(userTableData);
-         console.log("User data Fetch response: ", userTableData);
-     
-
-         // alert("Food fetch successfully!");
-           } catch (err) {
-             console.error("ERROR:", err);
-        //  alert("fetch failed");
-           }
-         }
+    
          
        
 
