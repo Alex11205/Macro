@@ -1,6 +1,6 @@
 package com.alex.macro.dto;
 
-public record FavoriteFood(
+public record FavoriteFoodResponse(
         String name,
         Double carb,
         Double protein,

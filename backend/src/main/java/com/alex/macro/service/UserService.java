@@ -44,18 +44,12 @@ public class UserService {
                 user.getEmail(),
                 user.getRole()
         );
-//        return userRepository.findById(id)
-//                .orElseThrow(() -> new NoSuchUserExistsException("User not found with id " + id));
     }
 
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new NoSuchUserExistsException(username));
     }
-
-//    public User createUser(User user) {
-//        return userRepository.save(user);
-//    }
 
     public RegisterResponse registerUser(RegisterRequest request) {
         // Map DTO to Entity
@@ -75,7 +69,7 @@ public class UserService {
 
             User savedUser = userRepository.save(user);
 
-            // Map Entity back to safe Response DTO
+
             return new RegisterResponse(
 //                    savedUser.getId(),
                     savedUser.getUsername(),
@@ -91,13 +85,6 @@ public class UserService {
         if (!userRepository.existsByUsername(username)) {
             throw new NoSuchUserExistsException(username);
         }
-
-//        User user = getUserByUsername(loginRequest.username());
-
-//        if (!user.getPassword().equals(loginRequest.password())) {
-//        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
-//            throw new RuntimeException("Invalid password");
-//        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -157,8 +144,6 @@ public class UserService {
 
         userRepository.deleteById(id);
     }
-
-
 
 
 }
