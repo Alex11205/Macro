@@ -153,6 +153,10 @@
         <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-liquibase</artifactId>
+        </dependency>
 
 
     </dependencies>
@@ -193,6 +197,32 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <!-- match whatever liquibase-core version Spring Boot resolved:
+                     ./mvnw dependency:tree | grep liquibase-core -->
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
+                    <outputChangeLogFile>src/main/resources/db/changelog/db.changelog-baseline.yaml</outputChangeLogFile>
+<!--                    <url>${env.DB_URL}</url>-->
+<!--                    <username>${env.DB_USERNAME}</username>-->
+<!--                    <password>${env.DB_PASSWORD}</password>-->
+                    <diffTypes>tables,columns,primarykeys,foreignkeys,indexes,uniqueconstraints</diffTypes>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+
         </plugins>
     </build>
 

@@ -1,0 +1,155 @@
+databaseChangeLog:
+- changeSet:
+    id: 1783408058975-1
+    author: 11205 (generated)
+    changes:
+    - createTable:
+        tableName: users
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: users_pkey
+        - column:
+            name: email
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        - column:
+            name: username
+            type: VARCHAR(255)
+        - column:
+            name: role
+            type: VARCHAR(255)
+            defaultValue: USER
+            constraints:
+              nullable: false
+- changeSet:
+    id: 1783408058975-2
+    author: 11205 (generated)
+    changes:
+    - createTable:
+        tableName: favorite
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: favorite_pkey
+        - column:
+            name: food_id
+            type: BIGINT
+            constraints:
+              nullable: false
+        - column:
+            name: user_id
+            type: BIGINT
+            constraints:
+              nullable: false
+        - column:
+            name: created_at
+            type: TIMESTAMP WITH TIME ZONE
+
+- changeSet:
+    id: 1783408058975-3
+    author: 11205 (generated)
+    changes:
+    - createTable:
+        tableName: food
+        columns:
+        - column:
+            name: id
+            type: BIGINT
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: food_pkey
+        - column:
+            name: calorie
+            type: FLOAT8
+        - column:
+            name: carb
+            type: FLOAT8
+        - column:
+            name: fat
+            type: FLOAT8
+        - column:
+            name: image_url
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: protein
+            type: FLOAT8
+        - column:
+            name: weight
+            type: FLOAT8
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+
+- changeSet:
+    id: 1783408058975-4
+    author: 11205 (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: username
+        constraintName: uk_users_username
+        tableName: users
+- changeSet:
+    id: 1783408058975-5
+    author: 11205 (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: user_id, food_id
+        constraintName: uk_favorite_user_food
+        tableName: favorite
+- changeSet:
+    id: 1783408058975-6
+    author: 11205 (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: name
+        constraintName: uk_food_name
+        tableName: food
+- changeSet:
+    id: 1783408058975-7
+    author: 11205 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: favorite
+        constraintName: fka2lwa7bjrnbti5v12mga2et1y
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+- changeSet:
+    id: 1783408058975-8
+    author: 11205 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: food_id
+        baseTableName: favorite
+        constraintName: fkfdlkt93e8646gcbwx4sx4oqpn
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: food
+        validate: true
+
