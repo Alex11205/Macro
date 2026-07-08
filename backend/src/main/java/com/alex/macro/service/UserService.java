@@ -8,6 +8,7 @@ import com.alex.macro.repository.UserRepository;
 import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.security.JwtService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
 
@@ -56,6 +58,7 @@ public class UserService {
             String username = request.username().trim();
 
             if (userRepository.existsByUsername(username)) {
+                log.warn("Registration was rejected because username already exists: username={}", username);
                 throw new UserAlreadyExistsException(username);
             }
 
@@ -69,6 +72,7 @@ public class UserService {
 
             User savedUser = userRepository.save(user);
 
+            log.info("Register successfully: username={}", username);
 
             return new RegisterResponse(
 //                    savedUser.getId(),
@@ -97,6 +101,8 @@ public class UserService {
 
         String token = jwtService.generateToken(principal);
 
+        log.info("User logged in successfully: username={}", username);
+
             return new LoginResponse(token, loginRequest.username());
         }
 
@@ -106,14 +112,20 @@ public class UserService {
                 .orElseThrow(() -> new NoSuchUserExistsException(username));
 
         if(!request.oldEmail().equals(existingUser.getEmail())) {
+            log.warn("Failed changing email: username={}", username);
             throw new InvalidEmailException("The current email you entered is incorrect.");
         }
 
 
-        if(request.newEmail().equals(existingUser.getEmail()))
+        if(request.newEmail().equals(existingUser.getEmail())) {
+            log.warn("Failed changing email: username={}", username);
             throw new SameEmailException("New email cannot be the same as your current email.");
+        }
+
 
         existingUser.setEmail(request.newEmail());
+
+        log.info("Email changed successfully: username={}", username);
 
         userRepository.save(existingUser);
     }
@@ -124,15 +136,19 @@ public class UserService {
 
 
         if (!passwordEncoder.matches(request.oldPassword(), existingUser.getPassword())) {
+            log.warn("Failed changing password: username={}", username);
             throw new InvalidPasswordException("The current password you entered is incorrect.");
         }
 
         if (passwordEncoder.matches(request.newPassword(), existingUser.getPassword())) {
+            log.warn("Failed changing password: username={}", username);
             throw new SamePasswordException("New password cannot be the same as your current password."
             );
         }
 
         existingUser.setPassword(passwordEncoder.encode(request.newPassword()));
+
+        log.info("Password changed successfully: username={}", username);
 
         userRepository.save(existingUser);
     }
@@ -142,6 +158,9 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserExistsException(String.valueOf(id)));
 
+        String username = user.getUsername();
+
+        log.info("User deleted successfully: username={}", username);
         userRepository.deleteById(id);
     }
 

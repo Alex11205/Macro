@@ -7,12 +7,14 @@ import com.alex.macro.exceptions.FoodAlreadyExistsException;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.model.Food;
 import com.alex.macro.repository.FoodRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class FoodService {
     private final FoodRepository foodRepository;
@@ -31,11 +33,12 @@ public class FoodService {
     public CreateFoodResponse createFood(CreateFoodRequest request, String username) {
         String name = request.name().trim();
         if (foodRepository.existsByName(name)) {
+            log.warn("Food creation rejected because foodName already exists: foodName={}", name);
             throw new FoodAlreadyExistsException(name);
         }
 
         Food food = new Food(
-                request.name(),
+                name,
                 request.carb(),
                 request.protein(),
                 request.fat(),
@@ -44,6 +47,8 @@ public class FoodService {
         );
 
         Food savedFood = foodRepository.save(food);
+
+        log.info("Food created successfully: foodName={}, createdBy={}", name, food.getCreatedBy());
 
         return new CreateFoodResponse(
                 savedFood.getName(),
