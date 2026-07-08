@@ -1,6 +1,5 @@
 package com.alex.macro.model;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -47,8 +46,6 @@ public class Food {
         this.protein = protein;
         this.fat = fat;
         this.calorie = calorie;
-//        this.weight = weight;
-//        this.imageUrl = imageUrl;
         this.createdBy = createdBy;
     }
 

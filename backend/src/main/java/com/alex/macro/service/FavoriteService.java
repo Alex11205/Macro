@@ -29,18 +29,11 @@ public class FavoriteService {
 
 
     public List<FavoriteFoodResponse> getFavoritesByUser(Long userId) {
-//        List<Favorite> favorites = favoriteRepository.findByUserId(userId);
-//        System.out.println("The result is: " + favorites);
-//        return favorites.stream()
-//                .map(Favorite::getFood)
-//                .toList();
+
         return favoriteRepository.findFavoriteFoodsByUserId(userId)
                 .stream()
                 .map(this::toFavoriteFood)
                 .toList();
-
-//        return favoriteRepository.findFavoriteFoodsByUserId(userId);
-
 
     }
 

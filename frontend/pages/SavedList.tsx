@@ -11,7 +11,6 @@ type CardData = {
   protein: number;
   fat: number;
   calorie: number;
-  // weight: number;
   mageUrl?: string | null;
 };
 
@@ -20,11 +19,13 @@ export default function SavedPage() {
   const [trackedItems, setTrackedItems] = useState<CardData[]>([]);
   const [weights, setWeights] = useState<Record<string, string>>({});
   const router = useRouter();
+  const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
   useEffect(() => {
     async function fetchFoodData() {
       try {
         const token = localStorage.getItem("token");
-        const userFoodResponse = await fetch("http://localhost:8080/api/favorites/favoriteList", {
+        const userFoodResponse = await fetch(`${API_BASE_URL}/api/favorites/favoriteList`, {
           method: "GET",
           headers: {
         "Content-Type": "application/json",
@@ -36,28 +37,22 @@ export default function SavedPage() {
     if (!userFoodResponse.ok) {
       const userFoodErrorText = await userFoodResponse.text();
       console.error("User food FETCH FAILED:", userFoodResponse.status, userFoodErrorText);
-      // alert("Fetching user food failed");
       return;
     }
 
     if (userFoodResponse.status === 401) {
   localStorage.removeItem("token");
   router.replace("/Signin");}
-      // console.log(card);
 
     const userFoodData = await userFoodResponse.json();
     setSavedItems(userFoodData);
     console.log("User food Fetch response: ", userFoodData);
-    // console.log("Saved cards are: " + localStorage.getItem("savedCards"));
-    // alert("Food fetch successfully!");
+
       } catch (err) {
         console.error("ERROR:", err);
-    // alert("fetch failed");
       }
     }
     fetchFoodData();
-    // const stored = JSON.parse(localStorage.getItem("savedCards") || "[]");
-    // setSavedItems(stored);
   }, []);
 
   function idKey(id: bigint) {
@@ -129,19 +124,15 @@ const totals = trackedItems.reduce(
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:8080/api/favorites/favorites/${card.id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/favorites/favorites/${card.id}`, {
         method: isSaved ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-
-        
-
+      
       });
 
-
-      // alert(`User id is: ${userId}. FoodId is ${card.id}. issaved is ${isSaved}`);
       if (!res.ok) {
         throw new Error("Request failed");
       }
@@ -153,7 +144,7 @@ const totals = trackedItems.reduce(
 
     } catch (error) {
       console.error(error);
-      // alert("Something went wrong. Please try again.");
+
     }
 
     const alreadySaved = savedItems.some((item) => item.id === card.id);
@@ -169,10 +160,6 @@ const totals = trackedItems.reduce(
     setSavedItems(updated);
     localStorage.setItem("savedCards", JSON.stringify(updated));
     
-
-    // const updated = savedItems.filter((item) => item.id !== card.id);
-    // setSavedItems(updated);
-    // localStorage.setItem("savedCards", JSON.stringify(updated));
   };
 
   return (
@@ -201,8 +188,6 @@ const totals = trackedItems.reduce(
               onToggleSave={toggleSave}
               onToggleTrack={toggleTrack}
               hasButton={true}
-              // isWeightReadOnly={false}
-              // isTracked
 
             />
           ))}

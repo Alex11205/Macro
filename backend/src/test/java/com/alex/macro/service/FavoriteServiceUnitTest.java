@@ -13,13 +13,8 @@ import com.alex.macro.exceptions.*;
 import com.alex.macro.model.Role;
 import com.alex.macro.model.User;
 import com.alex.macro.repository.UserRepository;
-import com.alex.macro.security.CustomUserDetails;
-import com.alex.macro.security.JwtService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -163,7 +158,6 @@ public class FavoriteServiceUnitTest {
         when(foodRepository.findById(foodId)).thenReturn(Optional.of(food));
         when(favoriteRepository.findByUserIdAndFoodId(userId, foodId)).thenReturn(Optional.of(favorite));
 
-//        willDoNothing().given(favoriteRepository).findByUserIdAndFoodId(userId, foodId);
         willDoNothing().given(favoriteRepository).delete(any());
 
         FavoriteResponse actualResponse = favoriteService.removeFavorite(userId, foodId);

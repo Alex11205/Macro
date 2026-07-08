@@ -20,7 +20,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
         Long getId();
         String getImageUrl();
     }
-//    @Query("SELECT f.name, f.carb, f.protein, f.fat, f.calorie FROM User u INNER JOIN Favorite fa ON u.id = fa.user_id INNER JOIN Food f ON fa.food = f.id")
+
     @Query(value = """
             SELECT f.name AS name, f.carb AS carb, f.protein AS protein, f.fat AS fat, f.calorie AS calorie, f.id AS id, f.image_url as imageUrl 
             FROM favorite fa 
@@ -31,24 +31,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     List<FavoriteFoodProjection> findFavoriteFoodsByUserId(@Param("id") Long id);
 
 
-//@Query("""
-//        SELECT new com.alex.macro.dto.FavoriteFood(
-//            food.name,
-//            food.carb,
-//            food.protein,
-//            food.fat,
-//            food.calorie,
-//            food.id,
-//            food.imageUrl
-//        )
-//        FROM Favorite favorite
-//        JOIN favorite.food food
-//        WHERE favorite.user.id = :id
-//""")
-//    List<FavoriteFood> findFavoriteFoodsByUserId(@Param("id") Long id);
-
     Optional<Favorite> findByUserIdAndFoodId(Long userId, Long foodId);
 
-//    @Transactional
-//    void deleteByUserIdAndFoodId(Long userId, Long foodId);
 }

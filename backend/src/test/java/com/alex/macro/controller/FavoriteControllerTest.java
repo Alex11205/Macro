@@ -18,7 +18,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -30,7 +29,6 @@ import com.alex.macro.security.*;
 
 
 @WebMvcTest(FavoriteController.class)
-//@AutoConfigureMockMvc(addFilters = false)
 @Import(SecurityConfig.class)
 public class FavoriteControllerTest {
 
@@ -46,7 +44,6 @@ public class FavoriteControllerTest {
     @MockitoBean
     private UserDetailsService userDetailsService;
 
-    //    @Autowired
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test

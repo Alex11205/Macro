@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Signin from "../pages/Signin";
 
 type HeroProps = {
   title: string;

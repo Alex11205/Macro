@@ -30,7 +30,6 @@ import com.alex.macro.security.*;
 
 
 @WebMvcTest(FoodController.class)
-//@AutoConfigureMockMvc(addFilters = false)
 @Import(SecurityConfig.class)
 public class FoodControllerTest {
 
@@ -46,7 +45,6 @@ public class FoodControllerTest {
     @MockitoBean
     private UserDetailsService userDetailsService;
 
-    //    @Autowired
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
@@ -102,7 +100,6 @@ public class FoodControllerTest {
     }
 
     @Test
-//    @WithMockUser(username = "username", roles = "USER")
     void createFood_ShouldSaveFood_WhenAuthenticatedAndRequestBodyIsValid() throws Exception {
 
         Long id = 1L;
@@ -184,7 +181,6 @@ public class FoodControllerTest {
     }
 
     @Test
-//    @WithMockUser(username = "username", roles = "USER")
     void createFood_ShouldThrowBadRequest_WhenRequestBodyNotExistOrJsonIsMalformed() throws Exception {
 
         Long id = 1L;
@@ -210,7 +206,6 @@ public class FoodControllerTest {
     }
 
     @Test
-//    @WithMockUser(username = "username", roles = "USER")
     void createFood_ShouldReturnBadRequest_WhenValidationFails() throws Exception {
 
         Long id = 1L;

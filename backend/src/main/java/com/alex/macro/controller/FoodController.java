@@ -4,7 +4,6 @@ package com.alex.macro.controller;
 import com.alex.macro.dto.CreateFoodRequest;
 import com.alex.macro.dto.CreateFoodResponse;
 import com.alex.macro.dto.FoodResponse;
-import com.alex.macro.model.Food;
 import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.service.FoodService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,10 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +22,6 @@ import java.util.List;
 @Tag(name = "Foods", description = "View all existing foods and create custom food")
 @RestController
 @RequestMapping("/api/foods")
-//@CrossOrigin(origins = "http://localhost:3000")
 public class FoodController {
 
     private final FoodService foodService;

@@ -1,13 +1,10 @@
 import Link from "next/link";
 
-
 export default function Header() {
 
   return (
     <div>
-     
 
-      {/* Navigation */}
       <nav className="bg-white shadow-md">
         <div className="max-w-5xl mx-auto flex justify-between items-center p-4">
           <Link href="/">

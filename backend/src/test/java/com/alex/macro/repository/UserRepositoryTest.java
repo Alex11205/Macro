@@ -1,11 +1,8 @@
 package com.alex.macro.repository;
 
-import com.alex.macro.dto.FoodResponse;
 import com.alex.macro.dto.UserAdminResponse;
-import com.alex.macro.model.Food;
 import com.alex.macro.model.Role;
 import com.alex.macro.model.User;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;

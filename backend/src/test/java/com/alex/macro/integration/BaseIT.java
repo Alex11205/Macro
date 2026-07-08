@@ -1,4 +1,4 @@
-package com.alex.macro.controller;
+package com.alex.macro.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest()
-//@AutoConfigureRestTestClient
-//@AutoConfigureTestRestTemplate
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Testcontainers
@@ -38,8 +35,6 @@ public class BaseIT {
     @Autowired
     protected MockMvc mockMvc;
 
-//    @Autowired
-//    protected ObjectMapper objectMapper;
       final ObjectMapper objectMapper = new ObjectMapper();
 
 }

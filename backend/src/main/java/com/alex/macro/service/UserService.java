@@ -9,14 +9,11 @@ import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.security.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -75,7 +72,6 @@ public class UserService {
             log.info("Register successfully: username={}", username);
 
             return new RegisterResponse(
-//                    savedUser.getId(),
                     savedUser.getUsername(),
                     savedUser.getEmail()
             );

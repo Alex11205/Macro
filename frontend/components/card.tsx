@@ -1,6 +1,3 @@
-import Link from "next/link";
-import { useState } from "react";
-
 
 type CardData = {
   id: bigint;
@@ -9,14 +6,12 @@ type CardData = {
   protein: number;
   fat: number;
   calorie: number;
-  // weight: number;
   imageUrl?: string | null;
 };
 
 type CardProps = CardData & {
   isSaved: boolean;
   isTracked?: boolean;
-  // isWeightReadOnly: boolean;
   hasButton: boolean;
   onToggleSave: (card: CardData) => void;
   onToggleTrack?: (card: CardData, checked: boolean) => void;
@@ -32,32 +27,26 @@ export default function Card({
   protein,
   fat,
   calorie,
-  // weight,
   hasButton,
   imageUrl, 
   isSaved,
   isTracked,
-  // isWeightReadOnly,
   onToggleSave, 
   onToggleTrack,
 }: CardProps) {
-    // const [isChecked, setIsChecked] = useState(false);
+
     const card = { id, name, carb, protein, fat, calorie, imageUrl };
 
 
   return (
     <div className="relative bg-white text-gray-800 rounded-xl shadow-md overflow-hidden p-4 m-2 w-64">
-      
-      
 
-      {/* <Link href={`/destinationpages/${id}`}> */}
         <img  
           src={ imageUrl ? imageUrl : "/images/food.jpg"  }
           alt={name}
           className="w-full h-40 object-cover"
         >
         </img>
-      {/* </Link> */}
 
       <div className="p-4">
       <p className="text-gray-600">Per 100g</p>
@@ -84,7 +73,7 @@ export default function Card({
       <button
         type="button"
         onClick={() => onToggleSave({ id, name, carb, protein, fat, calorie, imageUrl })}
-        // onClick={handleClick}
+
         className={`px-3 py-1 rounded text-sm font-medium transition mt-4 ${
           isSaved
             ? "bg-green-600 text-white hover:bg-green-700"

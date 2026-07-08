@@ -1,11 +1,8 @@
 package com.alex.macro.model;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +30,6 @@ public class User {
     @Email(message = "Email should be valid!")
     private String email;
 
-//    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
     @Enumerated(EnumType.STRING)
