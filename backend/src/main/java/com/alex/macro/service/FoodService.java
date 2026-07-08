@@ -26,10 +26,7 @@ public class FoodService {
         return foodRepository.findAllFoods();
     }
 
-    public Food getFoodByName(String foodName) {
-        return foodRepository.findByName(foodName)
-                .orElseThrow(() -> new NoSuchFoodExistsException(foodName));
-    }
+
 
     public CreateFoodResponse createFood(CreateFoodRequest request, String username) {
         String name = request.name().trim();
@@ -58,29 +55,36 @@ public class FoodService {
         );
     }
 
-    public Food updateFood(String foodName, Food updatedFood) {
-        Food existingFood = foodRepository.findByName(foodName)
-                .orElseThrow(() -> new NoSuchFoodExistsException(foodName));
 
-        // Overwrite old values with new values
-        existingFood.setName(updatedFood.getName());
-        existingFood.setCarb(updatedFood.getCarb());
-        existingFood.setProtein(updatedFood.getProtein());
-        existingFood.setFat(updatedFood.getFat());
-        existingFood.setCalorie(updatedFood.getCalorie());
-        existingFood.setWeight(updatedFood.getWeight());
-        existingFood.setImageUrl(updatedFood.getImageUrl());
+//   ---Unused feature---
+    //    public Food getFoodByName(String foodName) {
+//        return foodRepository.findByName(foodName)
+//                .orElseThrow(() -> new NoSuchFoodExistsException(foodName));
+//    }
 
-        // Save changes back to the database
-        return foodRepository.save(existingFood);
-    }
-
-    public void deleteFood(String foodName) {
-        if (!foodRepository.existsByName(foodName)) {
-            throw new NoSuchFoodExistsException(foodName);
-        }
-        foodRepository.deleteByName(foodName);
-    }
+//    public Food updateFood(String foodName, Food updatedFood) {
+//        Food existingFood = foodRepository.findByName(foodName)
+//                .orElseThrow(() -> new NoSuchFoodExistsException(foodName));
+//
+//        // Overwrite old values with new values
+//        existingFood.setName(updatedFood.getName());
+//        existingFood.setCarb(updatedFood.getCarb());
+//        existingFood.setProtein(updatedFood.getProtein());
+//        existingFood.setFat(updatedFood.getFat());
+//        existingFood.setCalorie(updatedFood.getCalorie());
+//        existingFood.setWeight(updatedFood.getWeight());
+//        existingFood.setImageUrl(updatedFood.getImageUrl());
+//
+//        // Save changes back to the database
+//        return foodRepository.save(existingFood);
+//    }
+//
+//    public void deleteFood(String foodName) {
+//        if (!foodRepository.existsByName(foodName)) {
+//            throw new NoSuchFoodExistsException(foodName);
+//        }
+//        foodRepository.deleteByName(foodName);
+//    }
 
 
 }

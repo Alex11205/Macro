@@ -5,13 +5,11 @@ import com.alex.macro.model.Role;
 import com.alex.macro.model.User;
 
 import com.alex.macro.service.FavoriteService;
-import com.alex.macro.service.FoodService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -70,7 +66,7 @@ public class FavoriteControllerTest {
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
-        FavoriteFood favoriteFood = new FavoriteFood(
+        FavoriteFoodResponse favoriteFoodResponse = new FavoriteFoodResponse(
                 "foodName",
                 0.0,
                 0.0,
@@ -80,20 +76,20 @@ public class FavoriteControllerTest {
                 "url"
         );
 
-        List<FavoriteFood> responseList = new ArrayList<>(List.of(favoriteFood));
+        List<FavoriteFoodResponse> responseList = new ArrayList<>(List.of(favoriteFoodResponse));
 
         when(favoriteService.getFavoritesByUser(id)).thenReturn(responseList);
 
         mockMvc.perform(get("/api/favorites/favoriteList")
                         .with(user(customUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value(favoriteFood.name()))
-                .andExpect(jsonPath("$[0].carb").value(favoriteFood.carb()))
-                .andExpect(jsonPath("$[0].protein").value(favoriteFood.protein()))
-                .andExpect(jsonPath("$[0].fat").value(favoriteFood.fat()))
-                .andExpect(jsonPath("$[0].calorie").value(favoriteFood.calorie()))
-                .andExpect(jsonPath("$[0].id").value(favoriteFood.id()))
-                .andExpect(jsonPath("$[0].imageUrl").value(favoriteFood.imageUrl()));
+                .andExpect(jsonPath("$[0].name").value(favoriteFoodResponse.name()))
+                .andExpect(jsonPath("$[0].carb").value(favoriteFoodResponse.carb()))
+                .andExpect(jsonPath("$[0].protein").value(favoriteFoodResponse.protein()))
+                .andExpect(jsonPath("$[0].fat").value(favoriteFoodResponse.fat()))
+                .andExpect(jsonPath("$[0].calorie").value(favoriteFoodResponse.calorie()))
+                .andExpect(jsonPath("$[0].id").value(favoriteFoodResponse.id()))
+                .andExpect(jsonPath("$[0].imageUrl").value(favoriteFoodResponse.imageUrl()));
 
     }
 

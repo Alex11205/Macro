@@ -1,6 +1,6 @@
 package com.alex.macro.service;
 
-import com.alex.macro.dto.FavoriteFood;
+import com.alex.macro.dto.FavoriteFoodResponse;
 import com.alex.macro.dto.FavoriteResponse;
 import com.alex.macro.exceptions.FavoriteAlreadyExistsException;
 import com.alex.macro.exceptions.NoSuchFoodExistsException;
@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -27,21 +26,7 @@ public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
 
-//    public void deleteFood(String foodName) {
-//        foodRepository.deleteByName(foodName);
-//    }
-
-
-
-//    public List<Food> getFavoritesByUser(Long userId) {
-//        List<Favorite> favorites = favoriteRepository.findByUserId(userId);
-//
-//        return favorites.stream()
-//                .map(Favorite::getFood)
-//                .toList();
-//    }
-
-    public List<FavoriteFood> getFavoritesByUser(Long userId) {
+    public List<FavoriteFoodResponse> getFavoritesByUser(Long userId) {
 //        List<Favorite> favorites = favoriteRepository.findByUserId(userId);
 //        System.out.println("The result is: " + favorites);
 //        return favorites.stream()
@@ -57,8 +42,8 @@ public class FavoriteService {
 
     }
 
-    private FavoriteFood toFavoriteFood(FavoriteRepository.FavoriteFoodProjection projection) {
-        return new FavoriteFood(
+    private FavoriteFoodResponse toFavoriteFood(FavoriteRepository.FavoriteFoodProjection projection) {
+        return new FavoriteFoodResponse(
                 projection.getName(),
                 projection.getCarb(),
                 projection.getProtein(),

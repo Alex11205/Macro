@@ -1,13 +1,11 @@
 package com.alex.macro.repository;
 
-import com.alex.macro.dto.FavoriteFood;
 import com.alex.macro.dto.FoodResponse;
 import com.alex.macro.model.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

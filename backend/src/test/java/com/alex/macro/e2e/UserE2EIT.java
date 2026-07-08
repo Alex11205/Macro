@@ -201,11 +201,11 @@ public class UserE2EIT {
         getFavoritesHeaders.setBearerAuth(token);
         HttpEntity<Void> getFavoritesEntity = new HttpEntity<>(getFavoritesHeaders);
 
-        ResponseEntity<List<FavoriteFood>> getFavorites = restTemplate.exchange(
+        ResponseEntity<List<FavoriteFoodResponse>> getFavorites = restTemplate.exchange(
                 "http://localhost:" + port + "/api/favorites/favoriteList",
                 HttpMethod.GET,
                 getFavoritesEntity,
-                new ParameterizedTypeReference<List<FavoriteFood>>() {}
+                new ParameterizedTypeReference<List<FavoriteFoodResponse>>() {}
         );
 
         assertThat(getFavorites.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -239,7 +239,7 @@ public class UserE2EIT {
                 "http://localhost:" + port + "/api/favorites/favoriteList",
                 HttpMethod.GET,
                 getFavoritesEntity,
-                new ParameterizedTypeReference<List<FavoriteFood>>() {}
+                new ParameterizedTypeReference<List<FavoriteFoodResponse>>() {}
         );
 
         assertThat(getFavorites.getStatusCode()).isEqualTo(HttpStatus.OK);
