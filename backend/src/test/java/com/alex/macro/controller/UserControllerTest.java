@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(UserController.class)
-//@AutoConfigureMockMvc(addFilters = false)
 @Import(SecurityConfig.class)
 class UserControllerTest {
 
@@ -45,17 +44,7 @@ class UserControllerTest {
     @MockitoBean
     private UserDetailsService userDetailsService;
 
-//    @Autowired
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-//    @Mock
-//    private UserRepository userRepository;
-
-//    @MockitoBean
-//    private JwtAuthenticationFilter jwtAuthenticationFilter;
-//
-//    @MockitoBean
-//    private CustomUserDetailsService customUserDetailsService;
 
     @Test
     void getAllUsers_ShouldFetchList_WhenRoleIsAdmin() throws Exception {
@@ -169,7 +158,6 @@ class UserControllerTest {
     }
 
     @Test
-//    @WithMockUser(username = "username", roles = "USER")
     void createUser_ShouldSaveUser_WhenRequestBodyIsValid() throws Exception {
 
         String username = "testUser";
@@ -208,18 +196,6 @@ class UserControllerTest {
 
     }
 
-//    @Test
-//    void createUser_ShouldReturnBadRequest_WhenJsonIsMalformed() throws Exception {
-//        String malformedJson = "{ username: 'testUser', email: }";
-//
-//        mockMvc.perform(post("/api/users/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(malformedJson))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$.message").value("Malformed JSON request body or missing body."));
-//
-//    }
-
     @Test
     void createUser_ShouldThrowBadRequest_WhenValidationFails() throws Exception {
 
@@ -236,25 +212,6 @@ class UserControllerTest {
                         .content(invalidPayload))
                 .andExpect(status().isBadRequest());
     }
-
-//    @Test
-//    void createUser_ShouldReturnBadRequest_WhenPasswordIsExtremelyLong() throws Exception {
-//
-//        String giantPassword = "a".repeat(5000);
-//
-//        String payloadWithGiantPassword = """
-//            {
-//                "username": "validUser",
-//                "email": "user@example.com",
-//                "password": "%s"
-//            }
-//            """.formatted(giantPassword);
-//
-//        mockMvc.perform(post("/api/users/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(payloadWithGiantPassword))
-//                .andExpect(status().isBadRequest());
-//    }
 
     @Test
     void login_ShouldReturnLoginResponse_WhenAuthenticationPasses() throws Exception {
@@ -309,51 +266,6 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    void login_ShouldReturnNotFound_WhenUsernameNotExist() throws Exception {
-//
-//        String username = "testUser";
-//        String password = "raw_password";
-//        String token = "mockJwt";
-//
-//        LoginRequest request = new LoginRequest(
-//                username,
-//                password
-//        );
-//
-//        when(userService.authenticate(request))
-//                .thenThrow(new NoSuchUserExistsException(username));
-//
-//        mockMvc.perform(post("/api/users/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(status().isNotFound())
-//                .andExpect(jsonPath("$.message").value("User '" + username + "' cannot be found."));
-//
-//    }
-
-//    @Test
-//    void login_ShouldReturnUnauthorized_WhenAuthenticationFails() throws Exception {
-//
-//        String username = "testUser";
-//        String password = "raw_password";
-//        String token = "mockJwt";
-//
-//        LoginRequest request = new LoginRequest(
-//                username,
-//                password
-//        );
-//
-//        when(userService.authenticate(request))
-//                .thenThrow(new BadCredentialsException("Invalid credentials"));
-//
-//        mockMvc.perform(post("/api/users/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(status().isUnauthorized())
-//                .andExpect(jsonPath("$.message").value("Invalid credentials"));
-//
-//    }
 
     @Test
     void changeEmail_ShouldReturnOk_WhenEmailIsCorrectAndUnique() throws Exception {
@@ -363,8 +275,7 @@ class UserControllerTest {
         String email = "user@example.com";
         String password = "hashed_password";
         String newEmail = "newEmail@example.com";
-//        String oldPassword = "raw_old_password";
-//        String newPassword = "raw_new_password";
+
         User user = new User(
                 id,
                 username,
@@ -383,7 +294,6 @@ class UserControllerTest {
         String response = "Email changed successfully!";
 
         willDoNothing().given(userService).changeEmail(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(put("/api/users/changeEmail")
                         .with(user(customUserDetails))
@@ -410,8 +320,7 @@ class UserControllerTest {
         String email = "admin@example.com";
         String password = "hashed_password";
         String newEmail = "newEmail@example.com";
-//        String oldPassword = "raw_old_password";
-//        String newPassword = "raw_new_password";
+
         User user = new User(
                 id,
                 username,
@@ -429,15 +338,12 @@ class UserControllerTest {
 
 
         willDoNothing().given(userService).changeEmail(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(put("/api/users/changeEmail")
                         .with(user(customUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(changeEmailRequest)))
                 .andExpect(status().isForbidden());
-//                .andExpect(content().string(response));
-
     }
 
     @Test
@@ -448,8 +354,7 @@ class UserControllerTest {
         String email = "user@example.com";
         String password = "hashed_password";
         String newEmail = "newEmail@example.com";
-//        String oldPassword = "raw_old_password";
-//        String newPassword = "raw_new_password";
+
         User user = new User(
                 id,
                 username,
@@ -462,7 +367,7 @@ class UserControllerTest {
 
 
         willDoNothing().given(userService).changeEmail(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
+
 
         mockMvc.perform(put("/api/users/changeEmail")
                         .with(user(customUserDetails))
@@ -479,8 +384,7 @@ class UserControllerTest {
         String email = "user@example.com";
         String password = "hashed_password";
         String newEmail = "newEmail@example.com";
-//        String oldPassword = "raw_old_password";
-//        String newPassword = "raw_new_password";
+
         User user = new User(
                 id,
                 username,
@@ -500,7 +404,6 @@ class UserControllerTest {
             """;
 
         willDoNothing().given(userService).changeEmail(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(put("/api/users/changeEmail")
                         .with(user(customUserDetails))
@@ -538,7 +441,6 @@ class UserControllerTest {
         String response = "Password changed successfully!";
 
         willDoNothing().given(userService).changePassword(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(put("/api/users/changePassword")
                         .with(user(customUserDetails))
@@ -584,14 +486,12 @@ class UserControllerTest {
 
 
         willDoNothing().given(userService).changeEmail(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(put("/api/users/changePassword")
                         .with(user(customUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(changePasswordRequest)))
                 .andExpect(status().isForbidden());
-//                .andExpect(content().string(response));
 
     }
 
@@ -616,7 +516,6 @@ class UserControllerTest {
 
 
         willDoNothing().given(userService).changePassword(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(put("/api/users/changePassword")
                         .with(user(customUserDetails))
@@ -651,7 +550,6 @@ class UserControllerTest {
             """;
 
         willDoNothing().given(userService).changePassword(any(), any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(put("/api/users/changePassword")
                         .with(user(customUserDetails))
@@ -684,7 +582,6 @@ class UserControllerTest {
         String response = "User with id " + deletedId + " has been successfully deleted!";
 
         willDoNothing().given(userService).deleteUser(any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(delete("/api/users/2")
                         .with(user(customUserDetails)))
@@ -697,7 +594,6 @@ class UserControllerTest {
     void deleteUser_ShouldThrowUnauthorized_WhenNotAuthenticated() throws Exception {
 
         willDoNothing().given(userService).deleteUser(any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(delete("/api/users/2"))
                 .andExpect(status().isUnauthorized());
@@ -726,7 +622,6 @@ class UserControllerTest {
 
 
         willDoNothing().given(userService).deleteUser(any());
-//        doNothing().when(userService).changeEmail(any(), any());
 
         mockMvc.perform(delete("/api/users/2")
                         .with(user(customUserDetails)))

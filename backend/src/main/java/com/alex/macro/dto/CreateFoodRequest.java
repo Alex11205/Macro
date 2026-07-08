@@ -2,7 +2,6 @@ package com.alex.macro.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
-import org.springframework.beans.factory.annotation.Value;
 
 public record CreateFoodRequest(
 

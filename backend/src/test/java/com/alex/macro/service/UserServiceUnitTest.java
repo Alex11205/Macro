@@ -163,13 +163,6 @@ public class UserServiceUnitTest {
 
         LoginRequest loginRequest = new LoginRequest("Username", "raw_password");
 
-//        LoginResponse loginResponse = new LoginResponse("jwt_token", "Username");
-//
-//        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
-//
-//        Authentication authentication = mock(Authentication.class);
-
-
         when(userRepository.existsByUsername("Username")).thenReturn(true);
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new BadCredentialsException("Invalid credentials"));

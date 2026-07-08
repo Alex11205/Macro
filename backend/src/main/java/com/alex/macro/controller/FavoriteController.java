@@ -22,7 +22,6 @@ import java.util.List;
         description = "Manage favorite list, add foods to list, removes from list")
 @RestController
 @RequestMapping("/api/favorites")
-//@CrossOrigin(origins = "http://localhost:3000")
 public class FavoriteController {
 
     private final FavoriteService favoriteService;

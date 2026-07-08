@@ -2,10 +2,8 @@ package com.alex.macro.controller;
 
 
 import com.alex.macro.dto.*;
-import com.alex.macro.model.User;
 import com.alex.macro.security.CustomUserDetails;
 import com.alex.macro.service.UserService;
-import io.jsonwebtoken.Jwt;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,17 +12,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "Users", description = "User registration, login, profile, and account management")
 @RestController
 @RequestMapping("/api/users")
-//@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
@@ -66,11 +61,6 @@ public class UserController {
                 userService.getUserById(userId));
     }
 
-//    @PostMapping
-//    public ResponseEntity<User> createUser(@RequestBody User user) {
-//        return ResponseEntity.ok(
-//                userService.createUser(user));
-//    }
 
     @Operation(summary = "Register a new user")
     @ApiResponses({
@@ -81,21 +71,11 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> createUser(@Valid @RequestBody RegisterRequest request) {
         RegisterResponse response = userService.registerUser(request);
-//        return new ResponseEntity<>(response, HttpStatus.CREATED);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
 
-//    @PostMapping("/login")
-//    public String login(@RequestBody LoginRequest request) {
-//        User user = userService.getUserByUsername(request.username());
-//
-//        if (!user.getPassword().equals(request.password())) {
-//            throw new RuntimeException("Invalid password");
-//        }
-//
-//        return String.valueOf(user.getId());
-//    }
+
 
     @Operation(summary = "User login")
     @ApiResponses({

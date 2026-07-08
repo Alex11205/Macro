@@ -45,16 +45,13 @@ public class SecurityConfig {
                                 .requestMatchers("/api/users/login", "/api/users/register", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/users/{id}").hasRole("ADMIN")
-//                        .requestMatchers("/api/foods/{foodName}").hasRole("ADMIN")
+
 
                         .requestMatchers(HttpMethod.PUT,"/api/users/changeEmail", "/api/users/changePassword").hasRole("USER")
                         .requestMatchers(HttpMethod.GET,"/api/users/profile", "/api/foods").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/foods").hasAnyRole("USER", "ADMIN")
-//                        .requestMatchers("/api/favorites/favorites/{foodId}", "/api/favorites/favoriteList").hasRole("USER")
+                                // Unused feature                       .requestMatchers("/api/foods/{foodName}").hasRole("ADMIN")
                                 .requestMatchers("/api/favorites/**").hasRole("USER")
-
-//                                .requestMatchers("/**").permitAll()
-//                                .anyRequest().permitAll()
                                 .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/v3/api-docs.yaml",
@@ -70,15 +67,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
-//        );
-//
-//                .formLogin(form -> form
-//                        .loginPage("/Signin")
-//                        .loginProcessingUrl("/api/users/login")
-//                        .defaultSuccessUrl("/profile", true)
-//                        .permitAll()
-//                )
-//                .httpBasic(basic -> {});
 
         return http.build();
     }

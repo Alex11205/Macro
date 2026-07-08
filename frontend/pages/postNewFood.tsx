@@ -26,8 +26,12 @@ const initialFormData: FoodFormData = {
   createdBy: "",
 };
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
+
 export default function AddFoodForm({
-  apiUrl = "http://localhost:8080/api/foods",
+  
+  apiUrl = `${API_BASE_URL}/api/foods`,
   onCreated,
 }: AddFoodFormProps) {
   const [formData, setFormData] = useState<FoodFormData>(initialFormData);
@@ -105,7 +109,6 @@ export default function AddFoodForm({
       setMessage("Food added successfully!");
     } catch (error) {
       console.error(error);
-      // setMessage("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

@@ -1,4 +1,4 @@
-package com.alex.macro.controller;
+package com.alex.macro.integration;
 
 import com.alex.macro.dto.*;
 import org.junit.jupiter.api.Test;

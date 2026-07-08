@@ -3,14 +3,12 @@ package com.alex.macro.repository;
 import com.alex.macro.model.Favorite;
 import com.alex.macro.model.Food;
 import com.alex.macro.model.User;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,46 +69,8 @@ public class FavoriteRepositoryTest extends BaseRepositoryTest{
         });
     }
 
-//    @Test
-//    void whenUserIsDeleted_ShouldCascadeRemoveFavorite() {
-//
-//        String username = "username";
-//        String foodName = "foodName";
-//
-//        User user = new User(
-//                username,
-//                "user@example.com",
-//                "hashed_password"
-//        );
-//
-//        Food food = new Food(
-//                foodName,
-//                0.0,
-//                0.0,
-//                0.0,
-//                0.0,
-//                "creator"
-//        );
-//
-//        Favorite favorite = new Favorite(
-//                user,
-//                food,
-//                Instant.now()
-//        );
-//
-//        testentityManager.persistAndFlush(user);
-//        testentityManager.persistAndFlush(food);
-//        testentityManager.persistAndFlush(favorite);
-//
-//        List<FavoriteRepository.FavoriteFoodProjection> result = favoriteRepository.findFavoriteFoodsByUserId(user.getId());
-//        assertEquals(1, result.size());
-//
-//        foodRepository.deleteById(food.getId());
-////        testentityManager.persistAndFlush(user);
-////        result = favoriteRepository.findFavoriteFoodsByUserId(user.getId());
-//        assertEquals(0, result.size());
-//
-//    }
+
+
 
     @Test
     void findFavoriteFoodsByUserId_ShouldReturnInterface_WhenUserIdExists() {

@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import Foods from "@/pages/foods";
 import Link from "next/link";
 import { useRouter } from "next/router";
 export default function Signup() {
@@ -9,19 +8,16 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
-
    const [message, setMessage] = useState('');
-
-
-     const [isSubmit, setIsSubmit] = useState(false);
        const router = useRouter();
+       const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
 
   async function handleRegister (event: React.SubmitEvent) {
     event.preventDefault();
 
     try {
-    const res = await fetch("http://localhost:8080/api/users/register", {
+    const res = await fetch(`${API_BASE_URL}/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +31,7 @@ export default function Signup() {
     if (!res.ok) {
       const errorText = await res.text();
       console.error("REGISTER FAILED:", res.status, errorText);
-      // alert("Register failed");
+
       return;
     }
 
@@ -43,9 +39,7 @@ export default function Signup() {
     const data = await res.json();
 
     console.log("REGISTER RESPONSE:", data);
-    // alert("token is: " + data.token);
 
-    // localStorage.setItem("token", data.token);
     alert("Register successfully!");
     router.replace("/Signin");
   } catch (err) {
@@ -70,9 +64,7 @@ export default function Signup() {
            
       <label className="block text-sm/6 font-medium text-black">Username</label>
         <input className="w-full px-4 py-2 border border-black-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-
         value={username}
-
         onChange={(event) => setUsername(event.target.value)}
         placeholder="Please enter your username"
         required
@@ -81,15 +73,11 @@ export default function Signup() {
       />
       <label className="block text-sm/6 font-medium text-black">Email</label>
         <input className="w-full px-4 py-2 border border-black-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
-
         value={email}
-
-        
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Please enter your email"
         required
         type="email"
-        // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
         title="Please enter valid email!" 
       />
       <label  className="block text-sm/6 font-medium text-black">Password</label>
@@ -112,11 +100,6 @@ export default function Signup() {
       </form>
       <br></br>
       <Link href="/Signin" className="text-gray-700 hover:text-blue-600">Already a member?</Link><br></br>
-      {/* {message && <p>{message}</p>} */}
-      
-
-
-      {/* {isSubmit && < Foods />} */}
       
       </main>
     </div>

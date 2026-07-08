@@ -4,13 +4,10 @@ import com.alex.macro.dto.CreateFoodRequest;
 import com.alex.macro.dto.CreateFoodResponse;
 import com.alex.macro.dto.FoodResponse;
 import com.alex.macro.exceptions.FoodAlreadyExistsException;
-import com.alex.macro.exceptions.NoSuchFoodExistsException;
 import com.alex.macro.model.Food;
 import com.alex.macro.repository.FoodRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

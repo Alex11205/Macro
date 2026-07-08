@@ -1,26 +1,24 @@
-// import { useState } from "react";
 
-import Foods from "@/pages/foods";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { type FormEvent, useState } from "react";
 
 export default function Signin() {
-  // Use a state to temperarily save the user input
-  const router = useRouter();
-  //  const [usernameInput, setUsernameInput] = useState("");
-  //  const [passwdInput, setPasswdInput] = useState("");
 
-   // Use a state to save username that will be submitted, the initiating value is 'Guest'
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
 
 async function handleLogin(event: FormEvent<HTMLFormElement>) {
   event.preventDefault();
 
   try {
-    const res = await fetch("http://localhost:8080/api/users/login", {
+    const res = await fetch(`${API_BASE_URL}/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,20 +33,19 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
     if (!res.ok) {
       const errorText = await res.text();
       console.error("LOGIN FAILED:", res.status, errorText);
-      // alert("Login failed");
+
       return;
     }
 
     const data = await res.json();
 
     console.log("LOGIN RESPONSE:", data);
-    // alert("token is: " + data.token);
 
     localStorage.setItem("token", data.token);
     router.push("/foods");
   } catch (err) {
     console.error("ERROR:", err);
-    // alert("fetch failed");
+
   }
 }
 
@@ -73,7 +70,6 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
         placeholder="Please enter your username"
         required
         
-        // pattern=".{6,}" 
         title="User name must be at least 6 characters!" 
       />
       <label  className="block text-sm/6 font-medium text-black">Password</label>

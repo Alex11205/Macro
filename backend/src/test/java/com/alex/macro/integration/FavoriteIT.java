@@ -1,4 +1,4 @@
-package com.alex.macro.controller;
+package com.alex.macro.integration;
 
 import com.alex.macro.dto.CreateFoodRequest;
 import com.alex.macro.dto.LoginRequest;
@@ -121,7 +121,6 @@ public class FavoriteIT extends BaseIT {
                 .andExpect(jsonPath("$.foodName").value(foodName))
                 .andExpect(jsonPath("$.createdAt").exists());
 
-//        List<FavoriteFood> emptyList = new ArrayList<>();
         mockMvc.perform(get("/api/favorites/favoriteList")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())

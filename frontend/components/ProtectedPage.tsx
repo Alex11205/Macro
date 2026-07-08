@@ -8,7 +8,7 @@ export default function ProtectedPage({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  // const [checking, setChecking] = useState(true);
+
   const [hasToken] = useState(() => {
     if (typeof window === "undefined") {
       return false;
