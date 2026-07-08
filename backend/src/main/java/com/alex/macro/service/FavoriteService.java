@@ -12,6 +12,7 @@ import com.alex.macro.repository.FavoriteRepository;
 import com.alex.macro.repository.FoodRepository;
 import com.alex.macro.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class FavoriteService {
 
     private final FoodRepository foodRepository;
@@ -62,9 +64,11 @@ public class FavoriteService {
         Instant createdAt = Instant.now();
         Favorite favorite = new Favorite(user, food, createdAt);
         if (favoriteRepository.findByUserIdAndFoodId(userId, foodId).isPresent()) {
+            log.warn("Duplicate favorite rejected: userId={}, foodId={}", userId, foodId);
             throw new FavoriteAlreadyExistsException("This favorite Item already exists!");
         }
         favoriteRepository.save(favorite);
+        log.info("Favorite added: userId={}, foodId={}", userId, foodId);
         return new FavoriteResponse(user.getUsername(), food.getName(), createdAt);
     }
 
@@ -78,6 +82,7 @@ public class FavoriteService {
                 .orElseThrow(() -> new NoSuchFoodExistsException(String.valueOf(foodId)));
 
         favoriteRepository.delete(fav);
+        log.info("Favorite deleted: userId={}, foodId={}", userId, foodId);
         return new FavoriteResponse(user.getUsername(), food.getName(), fav.getCreatedAt());
 
     }
