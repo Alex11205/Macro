@@ -37,7 +37,7 @@ Tracking Foods:
 ## Tech Stack
 
 ### Backend
-- Java 25
+- Java 21
 - Spring Boot 4
 - Spring Security
 - Spring Data JPA
@@ -125,7 +125,7 @@ http://localhost:8080/v3/api-docs
 Follow these steps to get a local development environment running on your machine.
 
 ### Prerequisites
-- Java 25
+- Java 21
 - Maven
 - Docker Desktop
 - Node.js 24
