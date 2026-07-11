@@ -42,8 +42,7 @@ public class FoodIT extends BaseIT {
                 carb,
                 protein,
                 fat,
-                calorie,
-                createdBy
+                calorie
         );
 
 

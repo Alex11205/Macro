@@ -44,8 +44,7 @@ public class FavoriteIT extends BaseIT {
                 carb,
                 protein,
                 fat,
-                calorie,
-                createdBy
+                calorie
         );
 
         mockMvc.perform(post("/api/users/register")
@@ -156,8 +155,7 @@ public class FavoriteIT extends BaseIT {
                 carb,
                 protein,
                 fat,
-                calorie,
-                createdBy
+                calorie
         );
 
         mockMvc.perform(post("/api/users/register")

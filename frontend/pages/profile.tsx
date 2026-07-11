@@ -61,8 +61,6 @@ const [users, setUsers] = useState<UserProfile[]>([]);
          const userTableData = await userDataResponse.json();
          
          setUsers(userTableData);
-         console.log("User data Fetch response: ", userTableData);
-     
 
            } catch (err) {
              console.error("ERROR:", err);
@@ -103,7 +101,7 @@ const [users, setUsers] = useState<UserProfile[]>([]);
          const userData = await userDataResponse.json();
          
          setProfile(userData);
-         console.log("User data Fetch response: ", userData);
+
      if (userData.role === "ADMIN") {
   fetchUser();
 }
