@@ -128,8 +128,7 @@ public class FoodControllerTest {
                 carb,
                 protein,
                 fat,
-                calorie,
-                createdBy
+                calorie
         );
 
         CreateFoodResponse response = new CreateFoodResponse(
@@ -170,8 +169,7 @@ public class FoodControllerTest {
                 carb,
                 protein,
                 fat,
-                calorie,
-                createdBy
+                calorie
         );
 
         mockMvc.perform(post("/api/foods")
@@ -234,8 +232,7 @@ public class FoodControllerTest {
                 carb,
                 protein,
                 fat,
-                calorie,
-                createdBy
+                calorie
         );
 
         mockMvc.perform(post("/api/foods")

@@ -8,7 +8,6 @@ type FoodFormData = {
   protein: string;
   fat: string
   calorie: string;
-  createdBy: string;
 };
 
 
@@ -23,7 +22,6 @@ const initialFormData: FoodFormData = {
   protein: "",
   fat: "",
   calorie: "",
-  createdBy: "",
 };
 
 const API_BASE_URL =
@@ -57,7 +55,6 @@ export default function AddFoodForm({
       protein: Number(formData.protein),
       fat: Number(formData.fat),
       calorie: Number(formData.calorie),
-      createdBy: "",
     };
 
     if (!payload.name) {

@@ -85,8 +85,7 @@ public class UserE2EIT {
                 carb,
                 protein,
                 fat,
-                calorie,
-                createdBy
+                calorie
         );
 
         ResponseEntity<RegisterResponse> createUser = restTemplate.postForEntity("http://localhost:" + port + "/api/users/register", registerRequest, RegisterResponse.class);

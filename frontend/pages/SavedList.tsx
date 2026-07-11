@@ -33,6 +33,9 @@ export default function SavedPage() {
       },
         });
 
+        if (userFoodResponse.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");}
 
     if (!userFoodResponse.ok) {
       const userFoodErrorText = await userFoodResponse.text();
@@ -40,13 +43,11 @@ export default function SavedPage() {
       return;
     }
 
-    if (userFoodResponse.status === 401) {
-  localStorage.removeItem("token");
-  router.replace("/Signin");}
+    
 
     const userFoodData = await userFoodResponse.json();
     setSavedItems(userFoodData);
-    console.log("User food Fetch response: ", userFoodData);
+
 
       } catch (err) {
         console.error("ERROR:", err);
@@ -133,14 +134,16 @@ const totals = trackedItems.reduce(
       
       });
 
+      if (res.status === 401) {
+  localStorage.removeItem("token");
+  router.replace("/Signin");
+      }
+
       if (!res.ok) {
         throw new Error("Request failed");
       }
 
-      if (res.status === 401) {
-  localStorage.removeItem("token");
-  router.replace("/Signin");
-      console.log(card);}
+      
 
     } catch (error) {
       console.error(error);

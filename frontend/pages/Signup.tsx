@@ -38,8 +38,6 @@ export default function Signup() {
 
     const data = await res.json();
 
-    console.log("REGISTER RESPONSE:", data);
-
     alert("Register successfully!");
     router.replace("/Signin");
   } catch (err) {

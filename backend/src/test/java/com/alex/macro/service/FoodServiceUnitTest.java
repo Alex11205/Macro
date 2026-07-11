@@ -43,8 +43,7 @@ public class FoodServiceUnitTest {
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                ""
+                0.0
         );
 
         CreateFoodResponse response = new CreateFoodResponse(
@@ -83,8 +82,7 @@ public class FoodServiceUnitTest {
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                ""
+                0.0
         );
 
         when(foodRepository.existsByName(foodName)).thenReturn(true);

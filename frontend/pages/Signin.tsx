@@ -39,8 +39,6 @@ async function handleLogin(event: FormEvent<HTMLFormElement>) {
 
     const data = await res.json();
 
-    console.log("LOGIN RESPONSE:", data);
-
     localStorage.setItem("token", data.token);
     router.push("/foods");
   } catch (err) {
