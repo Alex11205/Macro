@@ -34,11 +34,11 @@ public record CreateFoodRequest(
         @NotNull
         @Min(value = 0, message = "Calorie cannot be negative!")
         @Max(value = 10000, message = "Calorie cannot exceed 10,000!")
-        Double calorie,
+        Double calorie
 
-        @Schema(example = "user1")
-        @NotBlank
-        @Size(max = 50, message = "Creator cannot be more than 50 characters!")
-        String createdBy
+//        @Schema(example = "user1")
+//        @NotBlank
+//        @Size(max = 50, message = "Creator cannot be more than 50 characters!")
+//        String createdBy
 ) {
 }

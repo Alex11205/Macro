@@ -70,11 +70,9 @@ export default function Foods() {
 
     const allFoodData = await allFoodResponse.json();
     setFoodList(allFoodData);
-    console.log("All food Fetch response: ", allFoodData);
 
     const userFoodData = await userFoodResponse.json();
     setSavedItems(userFoodData);
-    console.log("User food Fetch response: ", userFoodData);
 
       } catch (err) {
         console.error("ERROR:", err);
@@ -103,7 +101,7 @@ export default function Foods() {
       if (res.status === 401) {
   localStorage.removeItem("token");
   router.replace("/Signin");
-      console.log(card);
+
       }
 
       if (!res.ok) {
