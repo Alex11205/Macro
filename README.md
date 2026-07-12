@@ -1,10 +1,14 @@
 # MacroTracker
 
+[![Backend CI](https://github.com/Alex11205/Macro/actions/workflows/backend-ci.yaml/badge.svg)](https://github.com/Alex11205/Macro/actions/workflows/backend-ci.yaml)
+
+[![Frontend CI](https://github.com/Alex11205/Macro/actions/workflows/frontend-ci.yaml/badge.svg)](https://github.com/Alex11205/Macro/actions/workflows/frontend-ci.yaml)
+
 MacroTracker is a full-stack macronutrition tracking app focused on backend API design, authentication, persistence, testing, and deployment readiness.
 
-Live Production: [View Site](http://vercel.com)
+Live Production: [View Site](https://macro-xi-lime.vercel.app)
 
-API Documentation: [Swagger UI Endpoint](http://swagger.com)
+API Documentation: [Swagger UI Endpoint](https://macro-production-b20a.up.railway.app/swagger-ui/index.html)
 
 User Profile:
 
@@ -117,8 +121,8 @@ The backend currently uses a layered structure:
 When the backend is running locally:
 
 ```text
-http://localhost:8080/swagger-ui.html
-http://localhost:8080/v3/api-docs
+https://macro-production-b20a.up.railway.app/swagger-ui.html
+https://macro-production-b20a.up.railway.app/v3/api-docs
 ```
 
 ## Local Setup
@@ -218,20 +222,20 @@ GitHub Actions runs:
 - Frontend install, lint, build and smoke test
 
 ## Deployment
-Real live deployment links will be added after release
-- Frontend:
-- Backend:
-- PostgreSQL:
-- Swagger UI:
+Real live deployment links:
+- Frontend: https://macro-xi-lime.vercel.app
+- Backend: https://macro-production-b20a.up.railway.app
+- Swagger UI: https://macro-production-b20a.up.railway.app/swagger-ui/index.html
 
 ## Future Improvements
 
+- Actuator
 - Pagination and sorting
 - Filter and search bar
 - Rate limiting
 - Refresh token flow
 - More frontend E2E tests coverage
-- Kafka
+- Caching
 - Feature-based package restructuring
 
 
