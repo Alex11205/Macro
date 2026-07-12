@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record LoginRequest(
-        @Schema(example = "alex")
+        @Schema(example = "alex123")
         @NotBlank(message = "Username is required")
         @Size(min = 3, max = 20, message = "Username length should be between 3 and 20 characters!")
         String username,

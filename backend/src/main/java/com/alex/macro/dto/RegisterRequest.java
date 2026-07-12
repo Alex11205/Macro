@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record RegisterRequest(
-        @Schema(example = "alex")
+        @Schema(example = "alex123")
         @NotBlank(message = "Username cannot be empty")
         @Size(min = 3, max = 20, message = "Username length should be between 3 and 20 characters!")
         String username,
