@@ -10,7 +10,7 @@ Live Production: [View Site](https://macro-xi-lime.vercel.app)
 
 API Documentation: [Swagger UI Endpoint](https://macro-production-b20a.up.railway.app/swagger-ui/index.html)
 
-## Why I Built it
+## Why I Built It
 
 Tracking daily calories and macronutrients can be repetitive and error-prone. MacroTracker provides a centralized application for managing foods, recording daily intake, creating custom foods and monitoring nutritional targets.
 
@@ -33,7 +33,7 @@ Tracking Foods:
 - Stateless JWT authentication with USER and ADMIN authorization
 - BCrypt password hashing and validated DTO-based request handling
 - Centralized exception handling with consistent error responses and application logging with SLF4J
-- PostgreSQL persistence with versioned Liquibase migrations and Spring JPA
+- PostgreSQL persistence with Spring Data JPA and versioned Liquibase migrations
 - Unit, controller slice, Testcontainers repository, integration, and E2E testing
 - Automated backend and frontend verification through GitHub Actions
 - OpenAPI/Swagger API documentation
@@ -45,7 +45,7 @@ Tracking Foods:
 - Custom food creation and browsing
 - Personal favorite food management
 - Daily macro tracking with automated caloric breakdown
-- Email and password changing
+- Email and password updates
 - User management for ADMINs
 
 
@@ -67,7 +67,7 @@ Tracking Foods:
 - React
 - TypeScript/JavaScript
 - Playwright smoke test
-- CSS/Tailwind
+- Tailwind CSS
 
 ### DevOps
 - Docker Compose
@@ -154,7 +154,7 @@ cd Macro/backend
 
 ### Backend Environment Variables
 
-Create 'backend/secret.env' based on 'backend/secret.env.example':
+Create `backend/secret.env` based on `backend/secret.env.example`:
 
 ```bash
 cp secret.env.example secret.env
@@ -170,7 +170,7 @@ JWT_SECRET_KEY=your_base64_secret
 JWT_EXPIRATION=3600000
 ```
 
-Create a db_password.txt in /backend containing your database password only, and it must match DB_PASSWORD in your secret.env
+Create `/backend/db_password.txt` containing only your database password, and it must match `DB_PASSWORD` in your `secret.env`
 ```txt
 your_password
 ```
@@ -221,7 +221,7 @@ npm run build
 npm run test:smoke
 ```
 
-The application now should be accessible locally at [`http://localhost:3000`](http://localhost:3000)
+The application should now be accessible locally at [`http://localhost:3000`](http://localhost:3000)
 
 ## CI
 GitHub Actions runs:
@@ -229,7 +229,7 @@ GitHub Actions runs:
 - Frontend install, lint, build and smoke test
 
 ## Deployment
-Real live deployment links:
+Production deployment links:
 - Frontend: https://macro-xi-lime.vercel.app
 - Backend: https://macro-production-b20a.up.railway.app
 - Swagger UI: https://macro-production-b20a.up.railway.app/swagger-ui/index.html

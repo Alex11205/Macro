@@ -7,7 +7,7 @@ export default function Footer() {
       <div className={styles.inner}>
         <div className={styles.brand}>
           <h2 className={styles.logo}>MacroTracker</h2>
-          <p className={styles.tagline}>Track the micronutrients in your food</p>
+          <p className={styles.tagline}>Track calories and macronutrients in your food</p>
         </div>
 
       </div>
