@@ -12,10 +12,8 @@ export default function Home() {
 
       <main className="min-h-screen  mx-auto p-6 text-black">
 
-
       </main>
-      
-
+    
     </div>
   );
 }
