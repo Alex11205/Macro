@@ -268,7 +268,7 @@ Production deployment links:
 - Filter and search bar
 - Rate limiting
 - Refresh token flow
-- Broader frontend E2E tests coverage
+- More frontend E2E tests coverage
 - Caching
 - Feature-based package restructuring
 
