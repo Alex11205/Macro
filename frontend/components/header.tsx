@@ -16,7 +16,7 @@ export default function Header() {
           <div className="flex justify-center gap-8 text-gray-700 font-medium">
         <Link href="/" className="text-gray-700 hover:text-blue-600">HOME</Link><br></br>
         <Link href="/foods" className="text-gray-700 hover:text-blue-600">EXPLORE FOODS</Link><br></br>
-        <Link href="/SavedList" className="text-gray-700 hover:text-blue-600">MACRO CACULATOR</Link>
+        <Link href="/SavedList" className="text-gray-700 hover:text-blue-600">MACRO CALCULATOR</Link>
         <Link href="/profile" className="text-gray-700 hover:text-blue-600">PROFILE</Link>
 
         
