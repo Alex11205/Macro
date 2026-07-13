@@ -10,7 +10,6 @@ export default function Footer() {
           <p className={styles.tagline}>Track the micronutrients in your food</p>
         </div>
 
- 
       </div>
 
       <div className={styles.bottom}>
