@@ -4,15 +4,15 @@
 
 [![Frontend CI](https://github.com/Alex11205/Macro/actions/workflows/frontend-ci.yaml/badge.svg)](https://github.com/Alex11205/Macro/actions/workflows/frontend-ci.yaml)
 
-MacroTracker is a full-stack macronutrition tracking application, focused on backend secure REST API development, relational data modeling, automated testing, GitHub Actions CI, and production deployment.
+MacroTracker is a deployed full-stack macronutrition tracking application focused on secure backend REST API development, relational data modeling, automated testing, GitHub Actions CI, and production deployment.
 
 Live Production: [View Site](https://macro-xi-lime.vercel.app)
 
 API Documentation: [Swagger UI Endpoint](https://macro-production-b20a.up.railway.app/swagger-ui/index.html)
 
-## Why I develop it
+## Why I Built It
 
-It's essential for people working out or on a diet to track their daily macros and calories. So I developed this web app to make it easier. 
+Tracking daily calories and macronutrients can be repetitive and error-prone. MacroTracker provides a centralized application for managing foods, recording daily intake, creating custom foods and monitoring nutritional targets.
 
 ## Screenshots & GIFs
 
@@ -32,26 +32,22 @@ Tracking Foods:
 
 - Stateless JWT authentication with USER and ADMIN authorization
 - BCrypt password hashing and validated DTO-based request handling
-- Global Exception handling with SLF4J Logging
-- PostgreSQL persistence with versioned Liquibase migrations
+- Centralized exception handling with consistent error responses and application logging with SLF4J
+- PostgreSQL persistence with Spring Data JPA and versioned Liquibase migrations
 - Unit, controller slice, Testcontainers repository, integration, and E2E testing
 - Automated backend and frontend verification through GitHub Actions
+- OpenAPI/Swagger API documentation
 - Independently deployed frontend and backend services
 
 ## Features
 
-- User registration and login with JWT authentication
-- Role-based authorization for USER and ADMIN endpoints
+- User registration and login
 - Custom food creation and browsing
 - Personal favorite food management
 - Daily macro tracking with automated caloric breakdown
-- Global exception handling with consistent error responses
-- SLF4J Logging
-- PostgreSQL persistence with Spring Data JPA
-- Version-controlled database migrations with Liquibase
-- OpenAPI/Swagger API documentation
-- Backend unit, controller slice, repository, integration, and E2E tests
-- GitHub Actions CI for backend and frontend
+- Email and password updates
+- User management for ADMINs
+
 
 ## Tech Stack
 
@@ -71,7 +67,7 @@ Tracking Foods:
 - React
 - TypeScript/JavaScript
 - Playwright smoke test
-- CSS/Tailwind
+- Tailwind CSS
 
 ### DevOps
 - Docker Compose
@@ -133,11 +129,9 @@ The backend currently uses a layered structure:
 
 ## API Documentation
 
-
-```text
-https://macro-production-b20a.up.railway.app/swagger-ui.html
-https://macro-production-b20a.up.railway.app/v3/api-docs
-```
+- [Production Swagger UI](https://macro-production-b20a.up.railway.app/swagger-ui/index.html)
+- [Production OpenAPI Specification](https://macro-production-b20a.up.railway.app/v3/api-docs)
+- Local Swagger UI: `http://localhost:8080/swagger-ui/index.html`
 
 ## Local Setup
 Follow these steps to get a local development environment running on your machine.
@@ -160,7 +154,7 @@ cd Macro/backend
 
 ### Backend Environment Variables
 
-Create 'backend/secret.env' based on 'backend/secret.env.example':
+Create `backend/secret.env` based on `backend/secret.env.example`:
 
 ```bash
 cp secret.env.example secret.env
@@ -169,14 +163,14 @@ cp secret.env.example secret.env
 Example:
 
 ```properties
-DB_URL=jdbc:postgresql://localhost:5432/macro
+DB_URL=jdbc:postgresql://localhost:5432/macrodb
 DB_USER=postgres
 DB_PASSWORD=your_password
 JWT_SECRET_KEY=your_base64_secret
 JWT_EXPIRATION=3600000
 ```
 
-Create a db_password.txt in /backend containing your database password only, and it must match DB_PASSWORD in your secret.env
+Create `/backend/db_password.txt` containing only your database password, and it must match `DB_PASSWORD` in your `secret.env`
 ```txt
 your_password
 ```
@@ -199,8 +193,6 @@ This runs:
 - Repository tests: JPA mappings and PostgreSQL behavior through Testcontainers
 - Integration tests: security, service, persistence, and API layers together
 - E2E tests: complete user workflows
-- Frontend smoke test: critical UI flow and application availability
-
 
 ### Run Backend
 
@@ -229,7 +221,7 @@ npm run build
 npm run test:smoke
 ```
 
-The application now should be accessible locally at [`http://localhost:3000`](http://localhost:3000)
+The application should now be accessible locally at [`http://localhost:3000`](http://localhost:3000)
 
 ## CI
 GitHub Actions runs:
@@ -237,30 +229,38 @@ GitHub Actions runs:
 - Frontend install, lint, build and smoke test
 
 ## Deployment
-Real live deployment links:
+Production deployment links:
 - Frontend: https://macro-xi-lime.vercel.app
 - Backend: https://macro-production-b20a.up.railway.app
 - Swagger UI: https://macro-production-b20a.up.railway.app/swagger-ui/index.html
 
-## Challenges & Solutions
 
-- Challenge: All the integration tests passed individually, but some failed when I run ./mvnw clean verify.  
-  Cause: The outcome of previous tests may have impact on the following tests.  
-  Solution: Add a sql block to truncate all tables after each tests.  
-    
+## Challenges and Solutions
 
-- Challenge: GitHub Actions CI automated tests couldn't pass and the error message was too long to locate the cause.  
-  Solution: Add a step in CI to print the failsafe report, and found the root cause and resolved it.  
-  Cause: GitHub Actions couldn't read my JWT secret.  
-  Solution: Add a fake JWT secret in application-test.properties
+### Test isolation
 
+**Problem:** Integration tests passed individually but failed when the complete Maven test suite ran.
 
+**Cause:** Tests shared database state, so data created by one test affected subsequent tests.
 
-- Challenge: Everything worked fine in local development but failed deploying on Railway.  
-  Cause: It was because Railway didn't support Java 25 which I was using.  
-  Solution: I switched to Java 21.
+**Solution:** Added database cleanup after each test to ensure isolated execution.
 
- 
+### Diagnosing CI failures
+
+**Problem:** GitHub Actions failed with long logs that made the root cause difficult to identify.
+
+**Cause:** The test environment did not have a valid JWT secret.
+
+**Solution:** Published Maven Failsafe reports as part of CI diagnostics and added a non-production JWT secret to the test configuration.
+
+### Railway runtime compatibility
+
+**Problem:** The application ran locally but failed during Railway deployment.
+
+**Cause:** The deployment environment did not support the configured Java 25 runtime.
+
+**Solution:** Standardized the project and deployment environment on Java 21.
+
 ## Future Improvements
 
 - Actuator
@@ -268,7 +268,7 @@ Real live deployment links:
 - Filter and search bar
 - Rate limiting
 - Refresh token flow
-- More frontend E2E tests coverage
+- Broader frontend E2E tests coverage
 - Caching
 - Feature-based package restructuring
 
