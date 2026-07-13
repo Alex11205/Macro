@@ -4,11 +4,17 @@
 
 [![Frontend CI](https://github.com/Alex11205/Macro/actions/workflows/frontend-ci.yaml/badge.svg)](https://github.com/Alex11205/Macro/actions/workflows/frontend-ci.yaml)
 
-MacroTracker is a full-stack macronutrition tracking app focused on backend API design, authentication, persistence, testing, and deployment readiness.
+MacroTracker is a full-stack macronutrition tracking application, focused on backend secure REST API development, relational data modeling, automated testing, GitHub Actions CI, and production deployment.
 
 Live Production: [View Site](https://macro-xi-lime.vercel.app)
 
 API Documentation: [Swagger UI Endpoint](https://macro-production-b20a.up.railway.app/swagger-ui/index.html)
+
+## Why I develop it
+
+It's essential for people working out or on a diet to track their daily macros and calories. So I developed this web app to make it easier. 
+
+## Screenshots & GIFs
 
 User Profile:
 
@@ -22,7 +28,15 @@ Tracking Foods:
 
 ![Tracking Foods](assets/images/tracking_foods_git.gif)
 
+## Engineering Highlights
 
+- Stateless JWT authentication with USER and ADMIN authorization
+- BCrypt password hashing and validated DTO-based request handling
+- Global Exception handling with SLF4J Logging
+- PostgreSQL persistence with versioned Liquibase migrations
+- Unit, controller slice, Testcontainers repository, integration, and E2E testing
+- Automated backend and frontend verification through GitHub Actions
+- Independently deployed frontend and backend services
 
 ## Features
 
@@ -32,8 +46,9 @@ Tracking Foods:
 - Personal favorite food management
 - Daily macro tracking with automated caloric breakdown
 - Global exception handling with consistent error responses
+- SLF4J Logging
 - PostgreSQL persistence with Spring Data JPA
-- Robust schema evolution managed seamlessly via Liquibase
+- Version-controlled database migrations with Liquibase
 - OpenAPI/Swagger API documentation
 - Backend unit, controller slice, repository, integration, and E2E tests
 - GitHub Actions CI for backend and frontend
@@ -113,12 +128,11 @@ The backend currently uses a layered structure:
 |       |               +---repository
 |       |               \---service
 |       \---resources
-\---target
+\---pom.xml
 ```
 
 ## API Documentation
 
-When the backend is running locally:
 
 ```text
 https://macro-production-b20a.up.railway.app/swagger-ui.html
@@ -155,14 +169,14 @@ cp secret.env.example secret.env
 Example:
 
 ```properties
-DB_URL=jdbc:postgresql://localhost:5432/database
-DB_USER=database_user
+DB_URL=jdbc:postgresql://localhost:5432/macro
+DB_USER=postgres
 DB_PASSWORD=your_password
 JWT_SECRET_KEY=your_base64_secret
 JWT_EXPIRATION=3600000
 ```
 
-Create a db_password.txt in /backend containing your database password only
+Create a db_password.txt in /backend containing your database password only, and it must match DB_PASSWORD in your secret.env
 ```txt
 your_password
 ```
@@ -180,11 +194,12 @@ docker compose up -d database
 ```
 
 This runs:
-- Unit Tests
-- Controller slice tests
-- Repository tests with Testcontainers
-- Integration tests
-- Backend End to End tests
+- Unit tests: isolated service business logic
+- Controller slice tests: HTTP methods, validation, and exception responses
+- Repository tests: JPA mappings and PostgreSQL behavior through Testcontainers
+- Integration tests: security, service, persistence, and API layers together
+- E2E tests: complete user workflows
+- Frontend smoke test: critical UI flow and application availability
 
 
 ### Run Backend
@@ -227,6 +242,25 @@ Real live deployment links:
 - Backend: https://macro-production-b20a.up.railway.app
 - Swagger UI: https://macro-production-b20a.up.railway.app/swagger-ui/index.html
 
+## Challenges & Solutions
+
+- Challenge: All the integration tests passed individually, but some failed when I run ./mvnw clean verify.  
+  Cause: The outcome of previous tests may have impact on the following tests.  
+  Solution: Add a sql block to truncate all tables after each tests.  
+    
+
+- Challenge: GitHub Actions CI automated tests couldn't pass and the error message was too long to locate the cause.  
+  Solution: Add a step in CI to print the failsafe report, and found the root cause and resolved it.  
+  Cause: GitHub Actions couldn't read my JWT secret.  
+  Solution: Add a fake JWT secret in application-test.properties
+
+
+
+- Challenge: Everything worked fine in local development but failed deploying on Railway.  
+  Cause: It was because Railway didn't support Java 25 which I was using.  
+  Solution: I switched to Java 21.
+
+ 
 ## Future Improvements
 
 - Actuator
@@ -237,6 +271,7 @@ Real live deployment links:
 - More frontend E2E tests coverage
 - Caching
 - Feature-based package restructuring
+
 
 
 
